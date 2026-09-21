@@ -1,6 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
+import { createContext, ReactNode, useContext, useState } from 'react';
+import { useAuth } from './AuthContext';
 import { Product } from './products';
 
 interface CartItem extends Product {
@@ -23,8 +25,23 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const { isAuthenticated, hasSkippedAuth } = useAuth();
+  const router = useRouter();
 
   const addToCart = (product: Product) => {
+    // Check if user is authenticated or has skipped auth
+    if (!isAuthenticated && !hasSkippedAuth) {
+      // Redirect to login if not authenticated
+      router.push('/login');
+      return;
+    }
+
+    // If user skipped auth, prompt them to login
+    if (hasSkippedAuth && !isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
       if (existingItem) {

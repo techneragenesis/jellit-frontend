@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import { useAuth } from '../lib/AuthContext';
 import { useCart } from '../lib/CartContext';
 
 export default function Navbar() {
   const { cartCount, setIsCartOpen } = useCart();
+  const { user, isAuthenticated, logout } = useAuth();
 
   return (
     <nav className="navbar">
@@ -26,15 +28,30 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <button
-          className="cart-button"
-          onClick={() => setIsCartOpen(true)}
-        >
-          <span className="cart-icon">🛒</span>
-          {cartCount > 0 && (
-            <span className="cart-count">{cartCount}</span>
+        <div className="navbar-actions">
+          {isAuthenticated ? (
+            <div className="user-info">
+              <span className="user-name">{user?.name}</span>
+              <button className="logout-button" onClick={logout}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link href="/login" className="login-button">
+              Login
+            </Link>
           )}
-        </button>
+
+          <button
+            className="cart-button"
+            onClick={() => setIsCartOpen(true)}
+          >
+            <span className="cart-icon">🛒</span>
+            {cartCount > 0 && (
+              <span className="cart-count">{cartCount}</span>
+            )}
+          </button>
+        </div>
       </div>
 
       <style jsx>{`
@@ -89,6 +106,59 @@ export default function Navbar() {
         .nav-link:hover {
           background: rgba(255, 255, 255, 0.2);
           transform: translateY(-2px);
+        }
+
+        .navbar-actions {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .user-info {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .user-name {
+          color: white;
+          font-weight: 600;
+          font-size: 0.9rem;
+          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .logout-button {
+          background: rgba(255, 255, 255, 0.2);
+          border: none;
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-weight: 600;
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .logout-button:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: translateY(-2px);
+        }
+
+        .login-button {
+          background: white;
+          color: #c44cff;
+          text-decoration: none;
+          padding: 0.5rem 1.25rem;
+          border-radius: 20px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          transition: all 0.3s ease;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .cart-button {
@@ -152,6 +222,24 @@ export default function Navbar() {
 
           .logo-emoji {
             font-size: 1.5rem;
+          }
+
+          .navbar-actions {
+            gap: 0.5rem;
+          }
+
+          .user-name {
+            display: none;
+          }
+
+          .logout-button {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+          }
+
+          .login-button {
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
           }
         }
       `}</style>

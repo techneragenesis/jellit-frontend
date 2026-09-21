@@ -1,21 +1,89 @@
 'use client';
 
-import { products } from '../../lib/products';
+import { useEffect, useState } from 'react';
+import AuthGuard from '../../components/AuthGuard';
+import { Product as ApiProduct, getProducts } from '../../lib/api';
 import { useCart } from '../../lib/CartContext';
-import { useState } from 'react';
+import { products as localProducts } from '../../lib/products';
 
 export default function ProductsPage() {
   const { addToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [products, setProducts] = useState(localProducts);
+  const [isLoading, setIsLoading] = useState(true);
 
   const categories = ['All', 'Original', 'Bundle', 'Special'];
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getProducts();
+        if (response.data && response.data.length > 0) {
+          // Transform API products to match local product structure
+          const transformedProducts = response.data.map((apiProduct: ApiProduct) => ({
+            id: parseInt(apiProduct.id),
+            name: apiProduct.name,
+            description: apiProduct.description,
+            price: apiProduct.price,
+            image: apiProduct.imageUrl || apiProduct.emoji || '🫐',
+            category: apiProduct.category || 'Original',
+            emoji: apiProduct.emoji || '🫐',
+          }));
+          setProducts(transformedProducts);
+        }
+      } catch (error) {
+        console.error('Failed to fetch products from API, using local data:', error);
+        // Keep using local products if API fails
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
   
   const filteredProducts = selectedCategory === 'All' 
     ? products 
     : products.filter(p => p.category === selectedCategory);
 
+  if (isLoading) {
+    return (
+      <AuthGuard>
+        <div className="products-container">
+          <div className="loading-container">
+            <span className="loading-emoji">🫐</span>
+            <p>Loading products...</p>
+            <style jsx>{`
+              .loading-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 50vh;
+                gap: 1rem;
+              }
+              .loading-emoji {
+                font-size: 4rem;
+                animation: bounce 1s ease-in-out infinite;
+              }
+              @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-20px); }
+              }
+              p {
+                color: #666;
+                font-size: 1.1rem;
+              }
+            `}</style>
+          </div>
+        </div>
+      </AuthGuard>
+    );
+  }
+
   return (
-    <div className="products-container">
+    <AuthGuard>
+      <div className="products-container">
       <div className="products-header">
         <h1 className="products-title">
           Our Products 
@@ -239,5 +307,6 @@ export default function ProductsPage() {
         }
       `}</style>
     </div>
+    </AuthGuard>
   );
 }

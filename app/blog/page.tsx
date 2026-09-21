@@ -1,20 +1,90 @@
 'use client';
 
-import { recipes } from '../../lib/recipes';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import AuthGuard from '../../components/AuthGuard';
+import { Blog as ApiBlog, getBlogs } from '../../lib/api';
+import { recipes as localRecipes } from '../../lib/recipes';
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [expandedRecipe, setExpandedRecipe] = useState<number | null>(null);
+  const [recipes, setRecipes] = useState(localRecipes);
+  const [isLoading, setIsLoading] = useState(true);
 
   const categories = ['All', 'Classic', 'Dessert', 'Fusion', 'Cocktail', 'Party'];
+  
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await getBlogs();
+        if (response.data && response.data.length > 0) {
+          // Transform API blogs to match local recipe structure
+          const transformedRecipes = response.data.map((apiBlog: ApiBlog, index: number) => ({
+            id: parseInt(apiBlog.id) || index + 1,
+            title: apiBlog.title,
+            description: apiBlog.content.substring(0, 150) + '...',
+            ingredients: ['Jellit powder', 'Your favorite liquid', 'Ice'], // Default ingredients
+            instructions: apiBlog.content.split('\n').filter(step => step.length > 0),
+            difficulty: 'Easy',
+            time: '3 hours',
+            emoji: '🫐',
+            category: 'Classic',
+          }));
+          setRecipes(transformedRecipes);
+        }
+      } catch (error) {
+        console.error('Failed to fetch blogs from API, using local data:', error);
+        // Keep using local recipes if API fails
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
   
   const filteredRecipes = selectedCategory === 'All' 
     ? recipes 
     : recipes.filter(r => r.category === selectedCategory);
 
+  if (isLoading) {
+    return (
+      <AuthGuard>
+        <div className="blog-container">
+          <div className="loading-container">
+            <span className="loading-emoji">📖</span>
+            <p>Loading recipes...</p>
+            <style jsx>{`
+              .loading-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 50vh;
+                gap: 1rem;
+              }
+              .loading-emoji {
+                font-size: 4rem;
+                animation: bounce 1s ease-in-out infinite;
+              }
+              @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-20px); }
+              }
+              p {
+                color: #666;
+                font-size: 1.1rem;
+              }
+            `}</style>
+          </div>
+        </div>
+      </AuthGuard>
+    );
+  }
+
   return (
-    <div className="blog-container">
+    <AuthGuard>
+      <div className="blog-container">
       <div className="blog-header">
         <h1 className="blog-title">
           Recipe Hub 
@@ -302,5 +372,6 @@ export default function BlogPage() {
         }
       `}</style>
     </div>
+    </AuthGuard>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import AuthGuard from '../components/AuthGuard';
 import { useCart } from '../lib/CartContext';
 import { products } from '../lib/products';
 
@@ -9,7 +10,8 @@ export default function Home() {
   const featuredProducts = products.slice(0, 3);
 
   return (
-    <div className="home-container">
+    <AuthGuard>
+      <div className="home-container">
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
@@ -464,5 +466,6 @@ export default function Home() {
         }
       `}</style>
     </div>
+    </AuthGuard>
   );
 }
