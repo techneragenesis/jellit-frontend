@@ -33,10 +33,10 @@ export default function Home() {
         <div className="hero-emoji">
           <span className="big-emoji">🫐</span>
           <div className="floating-emojis">
-            <span className="float-emoji" style={{ '--delay': '0s' }}>🩷</span>
-            <span className="float-emoji" style={{ '--delay': '1s' }}>💙</span>
-            <span className="float-emoji" style={{ '--delay': '2s' }}>🧡</span>
-            <span className="float-emoji" style={{ '--delay': '3s' }}>💜</span>
+            <span className="float-emoji float-emoji-1">🩷</span>
+            <span className="float-emoji float-emoji-2">💙</span>
+            <span className="float-emoji float-emoji-3">🧡</span>
+            <span className="float-emoji float-emoji-4">💜</span>
           </div>
         </div>
       </section>
@@ -212,7 +212,22 @@ export default function Home() {
           position: absolute;
           font-size: 3rem;
           animation: float 4s ease-in-out infinite;
-          animation-delay: var(--delay);
+        }
+
+        .float-emoji-1 {
+          animation-delay: 0s;
+        }
+
+        .float-emoji-2 {
+          animation-delay: 1s;
+        }
+
+        .float-emoji-3 {
+          animation-delay: 2s;
+        }
+
+        .float-emoji-4 {
+          animation-delay: 3s;
         }
 
         @keyframes float {
