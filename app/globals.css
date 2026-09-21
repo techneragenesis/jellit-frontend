@@ -1,0 +1,87 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: linear-gradient(180deg, #fff5f8 0%, #f0f4ff 50%, #fff0f5 100%);
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Gen Z Pop Color Theme Variables */
+:root {
+  --neon-pink: #ff6b9d;
+  --electric-purple: #c44cff;
+  --vibrant-blue: #6b5bff;
+  --sunset-orange: #ff9f43;
+  --lime-green: #2ecc71;
+  --hot-red: #ff4757;
+  --gradient-primary: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
+  --gradient-secondary: linear-gradient(135deg, #ff9f43, #ff6b9d);
+  --gradient-accent: linear-gradient(135deg, #2ecc71, #6b5bff);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--electric-purple);
+}
+
+/* Button Animations */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(196, 76, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(196, 76, 255, 0.8);
+  }
+}
+
+/* Link Styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Utility Classes */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth Transitions */
+* {
+  transition: all 0.3s ease;
+}
+
+/* Selection Color */
+::selection {
+  background: var(--neon-pink);
+  color: white;
+}
