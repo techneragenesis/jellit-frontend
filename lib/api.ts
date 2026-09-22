@@ -8,7 +8,8 @@ interface ApiResponse<T> {
 // Generic API client with error handling
 async function apiRequest<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  adminUserId?: string
 ): Promise<ApiResponse<T>> {
   try {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
@@ -18,6 +19,7 @@ async function apiRequest<T>(
       headers: {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
+        ...(adminUserId && { 'x-user-id': adminUserId }),
         ...options.headers,
       },
     });
@@ -49,6 +51,8 @@ export interface User {
   email: string;
   name: string;
   phone: string;
+  role?: string;
+  createdAt?: string;
 }
 
 export interface LoginCredentials {
@@ -162,9 +166,89 @@ export async function getBlog(blogId: string) {
   return apiRequest<Blog>(`/api/blogs/${blogId}`);
 }
 
-export async function createBlog(blog: Omit<Blog, 'id' | 'createdAt'>) {
+export async function createBlog(blog: Omit<Blog, 'id' | 'createdAt' | 'updatedAt'>) {
   return apiRequest<Blog>('/api/blogs', {
     method: 'POST',
     body: JSON.stringify(blog),
   });
+}
+
+// ============ Admin APIs ============
+// All admin endpoints require x-user-id header with admin's user ID
+
+export interface Analytics {
+  totalUsers: number;
+  totalProducts: number;
+  totalOrders: number;
+  totalRevenue: number;
+  ordersByStatus: {
+    pending: number;
+    processing: number;
+    shipped: number;
+    delivered: number;
+    cancelled: number;
+  };
+  recentOrders: {
+    id: string;
+    total: number;
+    status: string;
+    customerName: string;
+    customerEmail: string;
+    createdAt: string;
+  }[];
+  lowStockProducts: {
+    id: string;
+    name: string;
+    stock: number;
+  }[];
+}
+
+export interface AdminUser extends User {
+  role: string;
+  createdAt: string;
+}
+
+export async function getAdminAnalytics(adminUserId: string) {
+  return apiRequest<Analytics>('/api/admin/analytics', {}, adminUserId);
+}
+
+export async function updateAdminProduct(adminUserId: string, productId: string, updates: Partial<Product>) {
+  return apiRequest<Product>(`/api/admin/products/${productId}`, {
+    method: 'PUT',
+    body: JSON.stringify(updates),
+  }, adminUserId);
+}
+
+export async function deleteAdminProduct(adminUserId: string, productId: string) {
+  return apiRequest<{ message: string }>(`/api/admin/products/${productId}`, {
+    method: 'DELETE',
+  }, adminUserId);
+}
+
+export async function updateAdminBlog(adminUserId: string, blogId: string, updates: Partial<Blog>) {
+  return apiRequest<Blog>(`/api/admin/blogs/${blogId}`, {
+    method: 'PUT',
+    body: JSON.stringify(updates),
+  }, adminUserId);
+}
+
+export async function deleteAdminBlog(adminUserId: string, blogId: string) {
+  return apiRequest<{ message: string }>(`/api/admin/blogs/${blogId}`, {
+    method: 'DELETE',
+  }, adminUserId);
+}
+
+export async function getAdminUsers(adminUserId: string) {
+  return apiRequest<AdminUser[]>('/api/admin/users', {}, adminUserId);
+}
+
+export async function getAdminOrders(adminUserId: string) {
+  return apiRequest<Order[]>('/api/admin/orders', {}, adminUserId);
+}
+
+export async function updateAdminOrderStatus(adminUserId: string, orderId: string, status: string) {
+  return apiRequest<Order>(`/api/admin/orders/${orderId}/status`, {
+    method: 'PUT',
+    body: JSON.stringify({ status }),
+  }, adminUserId);
 }

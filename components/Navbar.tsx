@@ -6,7 +6,7 @@ import { useCart } from '../lib/CartContext';
 
 export default function Navbar() {
   const { cartCount, setIsCartOpen } = useCart();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
   return (
     <nav className="navbar">
@@ -29,6 +29,11 @@ export default function Navbar() {
           {isAuthenticated && (
             <Link href="/orders" className="nav-link">
               Orders
+            </Link>
+          )}
+          {isAdmin && (
+            <Link href="/admin" className="nav-link admin-link">
+              Admin ⚡
             </Link>
           )}
         </div>
@@ -111,6 +116,11 @@ export default function Navbar() {
         .nav-link:hover {
           background: rgba(255, 255, 255, 0.2);
           transform: translateY(-2px);
+        }
+
+        .admin-link {
+          background: rgba(255, 255, 255, 0.15);
+          border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .navbar-actions {
