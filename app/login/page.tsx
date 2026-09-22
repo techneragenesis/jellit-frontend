@@ -17,6 +17,7 @@ export default function LoginPage() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,15 +117,25 @@ export default function LoginPage() {
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="••••••••"
-            />
+            <div className="password-input-container">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
           </div>
 
           <button
@@ -254,6 +265,32 @@ export default function LoginPage() {
           outline: none;
           border-color: #c44cff;
           box-shadow: 0 0 0 3px rgba(196, 76, 255, 0.1);
+        }
+
+        .password-input-container {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+
+        .password-input-container input {
+          width: 100%;
+          padding-right: 3rem;
+        }
+
+        .password-toggle {
+          position: absolute;
+          right: 0.75rem;
+          background: none;
+          border: none;
+          font-size: 1.2rem;
+          cursor: pointer;
+          padding: 0.25rem;
+          transition: transform 0.2s ease;
+        }
+
+        .password-toggle:hover {
+          transform: scale(1.1);
         }
 
         .submit-button {
