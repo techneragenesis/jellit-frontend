@@ -17,6 +17,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            body {
+              opacity: 0;
+              animation: fadeIn 0.3s ease 0.3s forwards;
+            }
+            @keyframes fadeIn {
+              to { opacity: 1; }
+            }
+          `
+        }} />
       </head>
       <body>
         <AuthProvider>
