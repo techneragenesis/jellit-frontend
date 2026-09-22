@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useAuth } from '../lib/AuthContext';
 
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
@@ -29,7 +29,7 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(180deg, #fff5f8 0%, #f0f4ff 50%, #fff0f5 100%)',
+        background: '#f4f5f7',
       }}>
         <div style={{ fontSize: '4rem', animation: 'bounce 1s ease-in-out infinite' }}>🫐</div>
         <style jsx>{`

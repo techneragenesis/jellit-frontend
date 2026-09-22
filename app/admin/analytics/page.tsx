@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../lib/AuthContext';
-import { getAdminAnalytics, Analytics } from '../../../lib/api';
+import { Analytics, getAdminAnalytics } from '../../../lib/api';
 
 export default function AnalyticsPage() {
   const { user } = useAuth();
@@ -158,13 +158,11 @@ export default function AnalyticsPage() {
         }
 
         .page-title {
-          font-size: 2rem;
-          font-weight: 800;
+          font-size: 1.75rem;
+          font-weight: 700;
           margin-bottom: 2rem;
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #111827;
+          letter-spacing: -0.02em;
         }
 
         .loading {

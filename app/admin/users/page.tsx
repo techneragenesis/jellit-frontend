@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../lib/AuthContext';
-import { getAdminUsers, AdminUser } from '../../../lib/api';
+import { AdminUser, getAdminUsers } from '../../../lib/api';
 
 export default function AdminUsersPage() {
   const { user } = useAuth();
@@ -94,13 +94,11 @@ export default function AdminUsersPage() {
         }
 
         .page-title {
-          font-size: 2rem;
-          font-weight: 800;
+          font-size: 1.75rem;
+          font-weight: 700;
           margin-bottom: 0.5rem;
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #111827;
+          letter-spacing: -0.02em;
         }
 
         .page-note {
@@ -158,7 +156,7 @@ export default function AdminUsersPage() {
           width: 36px;
           height: 36px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
+          background: #111827;
           color: white;
           display: flex;
           align-items: center;
@@ -176,7 +174,7 @@ export default function AdminUsersPage() {
         }
 
         .role-badge.admin {
-          background: linear-gradient(135deg, #ff6b9d, #c44cff);
+          background: #111827;
           color: white;
         }
 

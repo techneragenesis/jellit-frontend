@@ -4,74 +4,121 @@ import Link from 'next/link';
 import { useAuth } from '../lib/AuthContext';
 import { useCart } from '../lib/CartContext';
 
+const tickerItems = [
+  'TURN ANY LIQUID INTO JELLY',
+  '✶',
+  'JELLIT',
+  '✶',
+  'NO CAP. JUST JELLY',
+  '✶',
+  'POUR. MIX. WOBBLE.',
+  '✶',
+];
+
 export default function Navbar() {
   const { cartCount, setIsCartOpen } = useCart();
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
+  const ticker = [...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems];
+
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <Link href="/" className="navbar-logo">
-          <span className="logo-emoji">🫐</span>
-          <span className="logo-text">Jellit</span>
-        </Link>
-
-        <div className="navbar-links">
-          <Link href="/" className="nav-link">
-            Home
-          </Link>
-          <Link href="/products" className="nav-link">
-            Products
-          </Link>
-          <Link href="/blog" className="nav-link">
-            Blog
-          </Link>
-          {isAuthenticated && (
-            <Link href="/orders" className="nav-link">
-              Orders
-            </Link>
-          )}
-          {isAdmin && (
-            <Link href="/admin" className="nav-link admin-link">
-              Admin ⚡
-            </Link>
-          )}
-        </div>
-
-        <div className="navbar-actions">
-          {isAuthenticated ? (
-            <div className="user-info">
-              <span className="user-name">{user?.name}</span>
-              <button className="logout-button" onClick={logout}>
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link href="/login" className="login-button">
-              Login
-            </Link>
-          )}
-
-          <button
-            className="cart-button"
-            onClick={() => setIsCartOpen(true)}
-          >
-            <span className="cart-icon">🛒</span>
-            {cartCount > 0 && (
-              <span className="cart-count">{cartCount}</span>
-            )}
-          </button>
+    <div className="nav-wrap">
+      <div className="ticker">
+        <div className="ticker-track">
+          {ticker.map((item, i) => (
+            <span key={i} className="ticker-item">{item}</span>
+          ))}
         </div>
       </div>
+      <nav className="navbar">
+        <div className="navbar-container">
+          <Link href="/" className="navbar-logo">
+            <span className="logo-emoji">🫐</span>
+            <span className="logo-text">JELLIT</span>
+          </Link>
+
+          <div className="navbar-links">
+            <Link href="/" className="nav-link">
+              Home
+            </Link>
+            <Link href="/products" className="nav-link">
+              Products
+            </Link>
+            <Link href="/blog" className="nav-link">
+              Blog
+            </Link>
+            {isAuthenticated && (
+              <Link href="/orders" className="nav-link">
+                Orders
+              </Link>
+            )}
+            {isAdmin && (
+              <Link href="/admin" className="nav-link admin-link">
+                Admin ⚡
+              </Link>
+            )}
+          </div>
+
+          <div className="navbar-actions">
+            {isAuthenticated ? (
+              <div className="user-info">
+                <span className="user-name">{user?.name}</span>
+                <button className="logout-button" onClick={logout}>
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link href="/login" className="login-button">
+                Login
+              </Link>
+            )}
+
+            <button
+              className="cart-button"
+              onClick={() => setIsCartOpen(true)}
+            >
+              <span className="cart-icon">🛒</span>
+              {cartCount > 0 && (
+                <span className="cart-count">{cartCount}</span>
+              )}
+            </button>
+          </div>
+        </div>
+      </nav>
 
       <style jsx>{`
-        .navbar {
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          padding: 1rem 2rem;
+        .nav-wrap {
           position: sticky;
           top: 0;
           z-index: 1000;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .ticker {
+          background: #1a1a1a;
+          color: #FFF6E9;
+          overflow: hidden;
+          padding: 0.4rem 0;
+          border-bottom: 2px solid #1a1a1a;
+        }
+
+        .ticker-track {
+          display: flex;
+          gap: 2rem;
+          white-space: nowrap;
+          animation: marquee 30s linear infinite;
+          width: max-content;
+        }
+
+        .ticker-item {
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.15em;
+        }
+
+        .navbar {
+          background: #FFF6E9;
+          padding: 0.9rem 2rem;
+          border-bottom: 3px solid #1a1a1a;
         }
 
         .navbar-container {
@@ -89,38 +136,53 @@ export default function Navbar() {
           text-decoration: none;
           font-size: 1.8rem;
           font-weight: 800;
-          color: white;
-          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+          color: #1a1a1a;
+          font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+          letter-spacing: -0.02em;
         }
 
         .logo-emoji {
-          font-size: 2rem;
+          font-size: 1.8rem;
+        }
+
+        .logo-text {
+          color: #FF4D8D;
+          text-shadow: 2px 2px 0 #1a1a1a;
         }
 
         .navbar-links {
           display: flex;
-          gap: 2rem;
+          gap: 0.75rem;
         }
 
         .nav-link {
-          color: white;
+          color: #1a1a1a;
           text-decoration: none;
-          font-weight: 600;
-          font-size: 1rem;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          transition: all 0.3s ease;
-          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+          font-weight: 700;
+          font-size: 0.95rem;
+          padding: 0.45rem 1rem;
+          border-radius: 50px;
+          border: 2px solid transparent;
+          transition: all 0.15s ease;
         }
 
         .nav-link:hover {
-          background: rgba(255, 255, 255, 0.2);
-          transform: translateY(-2px);
+          border-color: #1a1a1a;
+          background: #FFD84D;
+          box-shadow: 3px 3px 0 #1a1a1a;
+          transform: translate(-1px, -1px);
         }
 
         .admin-link {
-          background: rgba(255, 255, 255, 0.15);
-          border: 1px solid rgba(255, 255, 255, 0.3);
+          background: #1a1a1a;
+          color: #FFF6E9;
+          border: 2px solid #1a1a1a;
+        }
+
+        .admin-link:hover {
+          background: #7B4DFF;
+          color: white;
+          box-shadow: 3px 3px 0 #1a1a1a;
         }
 
         .navbar-actions {
@@ -136,85 +198,79 @@ export default function Navbar() {
         }
 
         .user-name {
-          color: white;
-          font-weight: 600;
+          font-weight: 700;
           font-size: 0.9rem;
-          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .logout-button {
-          background: rgba(255, 255, 255, 0.2);
-          border: none;
-          color: white;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          font-weight: 600;
-          font-size: 0.85rem;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .logout-button:hover {
-          background: rgba(255, 255, 255, 0.3);
-          transform: translateY(-2px);
+          color: #1a1a1a;
         }
 
         .login-button {
-          background: white;
-          color: #c44cff;
-          text-decoration: none;
-          padding: 0.5rem 1.25rem;
-          border-radius: 20px;
-          font-weight: 600;
+          background: #1a1a1a;
+          color: #FFF6E9;
+          border: none;
+          padding: 0.55rem 1.4rem;
+          border-radius: 50px;
+          font-weight: 700;
           font-size: 0.9rem;
-          transition: all 0.3s ease;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          cursor: pointer;
+          text-decoration: none;
+          transition: all 0.15s ease;
         }
 
         .login-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          background: #FF4D8D;
+          transform: translate(-1px, -1px);
+          box-shadow: 3px 3px 0 #1a1a1a;
+        }
+
+        .logout-button {
+          background: transparent;
+          color: #1a1a1a;
+          border: 2px solid #1a1a1a;
+          padding: 0.4rem 1rem;
+          border-radius: 50px;
+          font-weight: 700;
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }
+
+        .logout-button:hover {
+          background: #1a1a1a;
+          color: #FFF6E9;
         }
 
         .cart-button {
-          background: white;
-          border: none;
-          padding: 0.75rem 1.25rem;
-          border-radius: 50px;
-          cursor: pointer;
-          font-size: 1.5rem;
           position: relative;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          background: #FFD84D;
+          border: 2px solid #1a1a1a;
+          font-size: 1.3rem;
+          cursor: pointer;
+          padding: 0.5rem 1.1rem;
+          border-radius: 50px;
+          transition: all 0.15s ease;
+          box-shadow: 3px 3px 0 #1a1a1a;
         }
 
         .cart-button:hover {
-          transform: scale(1.1);
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .cart-icon {
-          background: linear-gradient(135deg, #ff6b9d, #c44cff);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          transform: translate(-1px, -1px);
+          box-shadow: 4px 4px 0 #1a1a1a;
         }
 
         .cart-count {
           position: absolute;
-          top: -5px;
-          right: -5px;
-          background: #ff4757;
+          top: -8px;
+          right: -8px;
+          background: #FF4D8D;
           color: white;
-          font-size: 0.75rem;
-          font-weight: bold;
+          border: 2px solid #1a1a1a;
           width: 24px;
           height: 24px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          border: 2px solid white;
+          font-size: 0.75rem;
+          font-weight: 700;
         }
 
         @media (max-width: 768px) {
@@ -228,23 +284,23 @@ export default function Navbar() {
           }
 
           .navbar-links {
-            gap: 0.5rem;
+            gap: 0.4rem;
             order: 3;
             width: 100%;
             justify-content: center;
           }
 
           .nav-link {
-            font-size: 0.9rem;
-            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            padding: 0.35rem 0.7rem;
           }
 
           .navbar-logo {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
           }
 
           .logo-emoji {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
           }
 
           .navbar-actions {
@@ -256,25 +312,29 @@ export default function Navbar() {
           }
 
           .logout-button {
-            padding: 0.4rem 0.8rem;
+            padding: 0.35rem 0.7rem;
             font-size: 0.75rem;
           }
 
           .login-button {
-            padding: 0.4rem 1rem;
+            padding: 0.45rem 1rem;
             font-size: 0.8rem;
           }
 
           .cart-button {
-            padding: 0.5rem 1rem;
-            font-size: 1.2rem;
+            padding: 0.4rem 0.9rem;
+            font-size: 1.1rem;
+          }
+
+          .ticker-item {
+            font-size: 0.65rem;
           }
         }
 
         @media (max-width: 480px) {
           .nav-link {
             font-size: 0.8rem;
-            padding: 0.35rem 0.6rem;
+            padding: 0.3rem 0.55rem;
           }
 
           .navbar-links {
@@ -282,6 +342,6 @@ export default function Navbar() {
           }
         }
       `}</style>
-    </nav>
+    </div>
   );
 }

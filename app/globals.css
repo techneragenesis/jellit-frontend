@@ -5,23 +5,27 @@
 }
 
 body {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background: linear-gradient(180deg, #fff5f8 0%, #f0f4ff 50%, #fff0f5 100%);
-  color: #333;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: #FFF6E9;
+  color: #1a1a1a;
   line-height: 1.6;
 }
 
-/* Gen Z Pop Color Theme Variables */
+/* Neo-Brutalist Theme Variables */
 :root {
-  --neon-pink: #ff6b9d;
-  --electric-purple: #c44cff;
-  --vibrant-blue: #6b5bff;
-  --sunset-orange: #ff9f43;
-  --lime-green: #2ecc71;
-  --hot-red: #ff4757;
-  --gradient-primary: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-  --gradient-secondary: linear-gradient(135deg, #ff9f43, #ff6b9d);
-  --gradient-accent: linear-gradient(135deg, #2ecc71, #6b5bff);
+  --cream: #FFF6E9;
+  --ink: #1a1a1a;
+  --jelly-pink: #FF4D8D;
+  --jelly-purple: #7B4DFF;
+  --jelly-yellow: #FFD84D;
+  --jelly-green: #4ADE80;
+  --jelly-blue: #5B8CFF;
+  --jelly-orange: #FF9F43;
+  --border: 2px solid var(--ink);
+  --border-thick: 3px solid var(--ink);
+  --shadow: 4px 4px 0 var(--ink);
+  --shadow-lg: 6px 6px 0 var(--ink);
+  --gradient-primary: linear-gradient(135deg, #FF4D8D 0%, #7B4DFF 100%);
 }
 
 /* Custom Scrollbar */
@@ -30,19 +34,28 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f0f0f0;
+  background: #FFF6E9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gradient-primary);
+  background: var(--ink);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--electric-purple);
+  background: var(--jelly-purple);
 }
 
-/* Button Animations */
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
@@ -52,12 +65,12 @@ body {
   }
 }
 
-@keyframes glow {
+@keyframes wiggle {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(196, 76, 255, 0.5);
+    transform: rotate(-2deg);
   }
   50% {
-    box-shadow: 0 0 20px rgba(196, 76, 255, 0.8);
+    transform: rotate(2deg);
   }
 }
 
@@ -75,6 +88,10 @@ a {
   background-clip: text;
 }
 
+.display-font {
+  font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+}
+
 /* Smooth Transitions */
 * {
   transition: all 0.3s ease;
@@ -82,6 +99,6 @@ a {
 
 /* Selection Color */
 ::selection {
-  background: var(--neon-pink);
+  background: var(--jelly-pink);
   color: white;
 }

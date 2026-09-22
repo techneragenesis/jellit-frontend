@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import AuthGuard from '../../components/AuthGuard';
 import { useAuth } from '../../lib/AuthContext';
 import { getUserOrders, Order } from '../../lib/api';
-import AuthGuard from '../../components/AuthGuard';
 
 export default function OrdersPage() {
   const { user, isAuthenticated } = useAuth();
@@ -68,10 +68,8 @@ export default function OrdersPage() {
     <AuthGuard>
       <div className="orders-container">
         <div className="orders-header">
-          <h1 className="orders-title">
-            Your Orders 
-            <span className="title-emoji">📦</span>
-          </h1>
+          <div className="page-badge">✶ YOUR ORDERS ✶</div>
+          <h1 className="orders-title">ORDER HISTORY.</h1>
           <p className="orders-subtitle">
             Track your jelly magic deliveries
           </p>
@@ -120,8 +118,8 @@ export default function OrdersPage() {
         <style jsx>{`
           .orders-container {
             min-height: 100vh;
-            background: linear-gradient(180deg, #fff5f8 0%, #f0f4ff 50%, #fff0f5 100%);
-            padding: 2rem;
+            background: #FFF6E9;
+            padding: 3rem 2rem;
           }
 
           .orders-header {
@@ -130,33 +128,45 @@ export default function OrdersPage() {
             margin: 0 auto 3rem;
           }
 
-          .orders-title {
-            font-size: 3rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+          .page-badge {
+            display: inline-block;
+            background: #5B8CFF;
+            border: 2px solid #1a1a1a;
+            box-shadow: 3px 3px 0 #1a1a1a;
+            padding: 0.4rem 1rem;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            border-radius: 50px;
+            margin-bottom: 1.25rem;
+            transform: rotate(-2deg);
+            color: white;
           }
 
-          .title-emoji {
-            font-size: 3rem;
+          .orders-title {
+            font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
           }
 
           .orders-subtitle {
-            font-size: 1.3rem;
-            color: #666;
+            font-size: 1.15rem;
+            color: #555;
+            font-weight: 500;
           }
 
           .empty-orders {
             text-align: center;
             padding: 4rem 2rem;
             background: white;
+            border: 3px solid #1a1a1a;
             border-radius: 20px;
             max-width: 500px;
             margin: 0 auto;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 6px 6px 0 #1a1a1a;
           }
 
           .empty-emoji {
@@ -166,42 +176,46 @@ export default function OrdersPage() {
           }
 
           .empty-orders h2 {
+            font-family: 'Archivo Black', sans-serif;
             font-size: 1.5rem;
-            color: #333;
+            color: #1a1a1a;
             margin-bottom: 0.5rem;
+            text-transform: uppercase;
           }
 
           .empty-orders p {
             color: #666;
+            font-weight: 500;
           }
 
           .orders-grid {
             display: grid;
-            gap: 2rem;
+            gap: 1.5rem;
             max-width: 800px;
             margin: 0 auto;
           }
 
           .order-card {
             background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
+            border: 3px solid #1a1a1a;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 6px 6px 0 #1a1a1a;
+            transition: all 0.15s ease;
           }
 
           .order-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0 #1a1a1a;
           }
 
           .order-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
             padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #1a1a1a;
           }
 
           .order-info {
@@ -211,59 +225,62 @@ export default function OrdersPage() {
           }
 
           .order-id {
-            font-weight: 700;
-            color: #333;
-            font-size: 1.1rem;
+            font-family: 'Archivo Black', sans-serif;
+            color: #1a1a1a;
+            font-size: 1rem;
           }
 
           .order-status {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: capitalize;
+            padding: 0.35rem 0.9rem;
+            border: 2px solid #1a1a1a;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
           }
 
           .status-pending {
-            background: #fff3cd;
-            color: #856404;
+            background: #FFD84D;
+            color: #1a1a1a;
           }
 
           .status-processing {
-            background: #cce5ff;
-            color: #004085;
+            background: #5B8CFF;
+            color: white;
           }
 
           .status-shipped {
-            background: #d4edda;
-            color: #155724;
+            background: #7B4DFF;
+            color: white;
           }
 
           .status-delivered {
-            background: #d1ecf1;
-            color: #0c5460;
+            background: #4ADE80;
+            color: #1a1a1a;
           }
 
           .status-cancelled {
-            background: #f8d7da;
-            color: #721c24;
+            background: #FF4D8D;
+            color: white;
           }
 
           .order-date {
             color: #666;
             font-size: 0.9rem;
+            font-weight: 600;
           }
 
           .order-items {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
           }
 
           .order-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 0.65rem 0;
+            border-bottom: 1px dashed #ddd;
           }
 
           .order-item:last-child {
@@ -271,40 +288,42 @@ export default function OrdersPage() {
           }
 
           .item-quantity {
-            font-weight: 600;
-            color: #c44cff;
+            font-weight: 700;
+            color: #7B4DFF;
             width: 50px;
           }
 
           .item-name {
             flex: 1;
             color: #333;
+            font-weight: 500;
           }
 
           .item-price {
-            font-weight: 600;
-            color: #333;
+            font-weight: 700;
+            color: #1a1a1a;
           }
 
           .order-footer {
             display: flex;
             justify-content: flex-end;
             padding-top: 1rem;
-            border-top: 2px solid #f0f0f0;
+            border-top: 2px solid #1a1a1a;
           }
 
           .order-total {
+            font-family: 'Archivo Black', sans-serif;
             font-size: 1.3rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ff6b9d, #c44cff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #1a1a1a;
           }
 
           @media (max-width: 768px) {
-            .orders-title {
-              font-size: 2rem;
+            .orders-container {
+              padding: 2rem 1rem;
+            }
+
+            .orders-subtitle {
+              font-size: 1.05rem;
             }
 
             .order-header {

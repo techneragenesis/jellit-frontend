@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../lib/AuthContext';
 import {
-  getBlogs,
-  createBlog,
-  updateAdminBlog,
-  deleteAdminBlog,
-  Blog,
+    Blog,
+    createBlog,
+    deleteAdminBlog,
+    getBlogs,
+    updateAdminBlog,
 } from '../../../lib/api';
 
 export default function AdminBlogsPage() {
@@ -211,28 +211,26 @@ export default function AdminBlogsPage() {
         }
 
         .page-title {
-          font-size: 2rem;
-          font-weight: 800;
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          font-size: 1.75rem;
+          font-weight: 700;
+          color: #111827;
+          letter-spacing: -0.02em;
         }
 
         .add-button {
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
+          background: #111827;
           color: white;
           border: none;
-          padding: 0.75rem 1.5rem;
-          border-radius: 12px;
-          font-weight: 700;
+          padding: 0.65rem 1.4rem;
+          border-radius: 8px;
+          font-weight: 600;
+          font-size: 0.9rem;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.15s ease;
         }
 
         .add-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(196, 76, 255, 0.4);
+          background: #FF4D8D;
         }
 
         .error-banner {
@@ -271,18 +269,24 @@ export default function AdminBlogsPage() {
         .blog-form input:focus,
         .blog-form textarea:focus {
           outline: none;
-          border-color: #c44cff;
+          border-color: #111827;
         }
 
         .submit-button {
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
+          background: #111827;
           color: white;
           border: none;
-          padding: 0.75rem 2rem;
-          border-radius: 10px;
-          font-weight: 700;
+          padding: 0.7rem 1.75rem;
+          border-radius: 8px;
+          font-weight: 600;
+          font-size: 0.9rem;
           cursor: pointer;
           align-self: flex-start;
+          transition: background 0.15s ease;
+        }
+
+        .submit-button:hover {
+          background: #FF4D8D;
         }
 
         .blogs-list {

@@ -21,7 +21,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <aside className="admin-sidebar">
           <div className="sidebar-header">
             <span className="sidebar-logo">🫐</span>
-            <span className="sidebar-title">Admin Panel</span>
+            <div className="sidebar-title-wrap">
+              <span className="sidebar-title">Jellit Admin</span>
+              <span className="sidebar-subtitle">Management Console</span>
+            </div>
           </div>
           <nav className="sidebar-nav">
             {navItems.map((item) => (
@@ -45,44 +48,59 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <style jsx>{`
         .admin-layout {
           display: flex;
-          min-height: calc(100vh - 70px);
-          background: #f8f9fc;
+          min-height: calc(100vh - 120px);
+          background: #f4f5f7;
         }
 
         .admin-sidebar {
           width: 240px;
-          background: linear-gradient(180deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
+          background: #16181d;
           padding: 1.5rem 1rem;
           display: flex;
           flex-direction: column;
           position: sticky;
-          top: 70px;
-          height: calc(100vh - 70px);
+          top: 0;
+          height: 100vh;
+          align-self: flex-start;
         }
 
         .sidebar-header {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          padding-bottom: 1.5rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-          margin-bottom: 1.5rem;
+          gap: 0.75rem;
+          padding: 0 0.5rem 1.25rem;
+          border-bottom: 1px solid #2a2e37;
+          margin-bottom: 1.25rem;
         }
 
         .sidebar-logo {
-          font-size: 1.8rem;
+          font-size: 1.6rem;
+        }
+
+        .sidebar-title-wrap {
+          display: flex;
+          flex-direction: column;
         }
 
         .sidebar-title {
-          color: white;
-          font-weight: 800;
-          font-size: 1.2rem;
+          color: #fff;
+          font-weight: 700;
+          font-size: 1rem;
+          letter-spacing: -0.01em;
+        }
+
+        .sidebar-subtitle {
+          color: #6b7280;
+          font-size: 0.7rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
         }
 
         .sidebar-nav {
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 0.25rem;
           flex: 1;
         }
 
@@ -90,46 +108,49 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           display: flex;
           align-items: center;
           gap: 0.75rem;
-          padding: 0.75rem 1rem;
-          border-radius: 12px;
-          color: rgba(255, 255, 255, 0.85);
+          padding: 0.65rem 0.85rem;
+          border-radius: 8px;
+          color: #9ca3af;
           text-decoration: none;
           font-weight: 600;
-          transition: all 0.3s ease;
+          font-size: 0.9rem;
+          transition: all 0.15s ease;
         }
 
         .sidebar-link:hover {
-          background: rgba(255, 255, 255, 0.15);
-          color: white;
+          background: #23262e;
+          color: #fff;
         }
 
         .sidebar-link.active {
-          background: rgba(255, 255, 255, 0.25);
-          color: white;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+          background: #2d3340;
+          color: #fff;
+          box-shadow: inset 3px 0 0 #FF4D8D;
         }
 
         .sidebar-icon {
-          font-size: 1.3rem;
+          font-size: 1.1rem;
         }
 
         .sidebar-back {
-          color: rgba(255, 255, 255, 0.8);
+          color: #9ca3af;
           text-decoration: none;
-          font-size: 0.9rem;
-          padding: 0.75rem 1rem;
-          border-top: 1px solid rgba(255, 255, 255, 0.2);
-          transition: color 0.3s ease;
+          font-size: 0.85rem;
+          font-weight: 600;
+          padding: 0.75rem 0.85rem;
+          border-top: 1px solid #2a2e37;
+          transition: color 0.15s ease;
         }
 
         .sidebar-back:hover {
-          color: white;
+          color: #fff;
         }
 
         .admin-main {
           flex: 1;
           padding: 2rem;
           overflow-y: auto;
+          min-width: 0;
         }
 
         @media (max-width: 1024px) {
@@ -138,7 +159,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           }
 
           .sidebar-link {
-            padding: 0.65rem 0.85rem;
+            padding: 0.55rem 0.75rem;
+            font-size: 0.85rem;
           }
         }
 
@@ -156,21 +178,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           }
 
           .sidebar-header {
-            padding-bottom: 0.75rem;
+            padding: 0 0.25rem 0.75rem;
             margin-bottom: 0.75rem;
           }
 
-          .sidebar-title {
-            font-size: 1rem;
+          .sidebar-logo {
+            font-size: 1.3rem;
           }
 
-          .sidebar-logo {
-            font-size: 1.4rem;
+          .sidebar-title {
+            font-size: 0.9rem;
+          }
+
+          .sidebar-subtitle {
+            font-size: 0.6rem;
           }
 
           .sidebar-nav {
             flex-direction: row;
-            gap: 0.4rem;
+            gap: 0.35rem;
             overflow-x: auto;
             padding-bottom: 0.25rem;
             -webkit-overflow-scrolling: touch;
@@ -178,20 +204,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           .sidebar-link {
             white-space: nowrap;
-            padding: 0.5rem 0.9rem;
-            font-size: 0.85rem;
+            padding: 0.45rem 0.8rem;
+            font-size: 0.8rem;
             flex-shrink: 0;
           }
 
+          .sidebar-link.active {
+            box-shadow: none;
+            background: #FF4D8D;
+          }
+
           .sidebar-icon {
-            font-size: 1.1rem;
+            font-size: 1rem;
           }
 
           .sidebar-back {
             border-top: none;
             white-space: nowrap;
-            padding: 0.5rem 0.9rem;
-            font-size: 0.85rem;
+            padding: 0.45rem 0.8rem;
+            font-size: 0.8rem;
             align-self: flex-start;
           }
 

@@ -63,10 +63,8 @@ export default function BlogPage() {
     <AuthGuard>
       <div className="blog-container">
       <div className="blog-header">
-        <h1 className="blog-title">
-          Blog 
-          <span className="title-emoji">📖</span>
-        </h1>
+        <div className="page-badge">✶ FRESH FROM THE LAB ✶</div>
+        <h1 className="blog-title">THE BLOG.</h1>
         <p className="blog-subtitle">
           Level up your jelly game with our latest posts and recipes.
         </p>
@@ -125,8 +123,8 @@ export default function BlogPage() {
       <style jsx>{`
         .blog-container {
           min-height: 100vh;
-          background: linear-gradient(180deg, #fff5f8 0%, #f0f4ff 50%, #fff0f5 100%);
-          padding: 2rem;
+          background: #FFF6E9;
+          padding: 3rem 2rem;
         }
 
         .blog-header {
@@ -135,43 +133,56 @@ export default function BlogPage() {
           margin: 0 auto 3rem;
         }
 
-        .blog-title {
-          font-size: 3rem;
-          font-weight: 900;
-          margin-bottom: 1rem;
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+        .page-badge {
+          display: inline-block;
+          background: #4ADE80;
+          border: 2px solid #1a1a1a;
+          box-shadow: 3px 3px 0 #1a1a1a;
+          padding: 0.4rem 1rem;
+          font-weight: 700;
+          font-size: 0.8rem;
+          letter-spacing: 0.1em;
+          border-radius: 50px;
+          margin-bottom: 1.25rem;
+          transform: rotate(-2deg);
         }
 
-        .title-emoji {
-          font-size: 3rem;
+        .blog-title {
+          font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+          font-size: clamp(2.5rem, 7vw, 4.5rem);
+          color: #1a1a1a;
+          text-transform: uppercase;
+          letter-spacing: -0.02em;
+          margin-bottom: 0.75rem;
         }
 
         .blog-subtitle {
-          font-size: 1.3rem;
-          color: #666;
+          font-size: 1.15rem;
+          color: #555;
+          font-weight: 500;
         }
 
         .error-banner {
           max-width: 600px;
           margin: 0 auto 2rem;
-          background: #fee;
-          color: #c33;
+          background: #FFD0D0;
+          border: 2px solid #1a1a1a;
+          color: #1a1a1a;
           padding: 1rem;
           border-radius: 12px;
           text-align: center;
+          font-weight: 600;
         }
 
         .empty-state {
           text-align: center;
           padding: 4rem 2rem;
           background: white;
+          border: 3px solid #1a1a1a;
           border-radius: 20px;
           max-width: 500px;
           margin: 0 auto;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+          box-shadow: 6px 6px 0 #1a1a1a;
         }
 
         .empty-emoji {
@@ -181,13 +192,16 @@ export default function BlogPage() {
         }
 
         .empty-state h3 {
+          font-family: 'Archivo Black', sans-serif;
           font-size: 1.5rem;
-          color: #333;
+          color: #1a1a1a;
           margin-bottom: 0.5rem;
+          text-transform: uppercase;
         }
 
         .empty-state p {
           color: #666;
+          font-weight: 500;
         }
 
         .blogs-grid {
@@ -200,17 +214,18 @@ export default function BlogPage() {
 
         .blog-card {
           background: white;
-          border-radius: 20px;
+          border: 3px solid #1a1a1a;
+          border-radius: 16px;
           overflow: hidden;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-          transition: all 0.3s ease;
+          box-shadow: 6px 6px 0 #1a1a1a;
+          transition: all 0.15s ease;
           display: flex;
           flex-direction: column;
         }
 
         .blog-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+          transform: translate(-3px, -3px);
+          box-shadow: 9px 9px 0 #1a1a1a;
         }
 
         .blog-image img {
@@ -218,6 +233,7 @@ export default function BlogPage() {
           height: 200px;
           object-fit: cover;
           display: block;
+          border-bottom: 3px solid #1a1a1a;
         }
 
         .blog-card-content {
@@ -233,44 +249,50 @@ export default function BlogPage() {
           align-items: center;
           margin-bottom: 0.75rem;
           font-size: 0.85rem;
-          color: #999;
+          color: #777;
         }
 
         .blog-author {
-          font-weight: 600;
-          color: #c44cff;
+          font-weight: 700;
+          color: #7B4DFF;
         }
 
         .blog-card-title {
-          font-size: 1.4rem;
-          font-weight: 700;
+          font-family: 'Archivo Black', sans-serif;
+          font-size: 1.3rem;
           margin-bottom: 0.75rem;
-          color: #333;
+          color: #1a1a1a;
+          text-transform: uppercase;
+          letter-spacing: -0.01em;
         }
 
         .blog-excerpt {
-          color: #666;
+          color: #555;
           line-height: 1.7;
           margin-bottom: 1rem;
           flex: 1;
           white-space: pre-line;
+          font-size: 0.95rem;
         }
 
         .expand-button {
           width: 100%;
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          border: none;
-          color: white;
-          padding: 0.75rem;
-          border-radius: 12px;
-          font-weight: 600;
+          background: #1a1a1a;
+          border: 2px solid #1a1a1a;
+          color: #FFF6E9;
+          padding: 0.7rem;
+          border-radius: 50px;
+          font-weight: 700;
+          font-size: 0.9rem;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.15s ease;
+          font-family: inherit;
         }
 
         .expand-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 15px rgba(196, 76, 255, 0.3);
+          background: #7B4DFF;
+          transform: translate(-1px, -1px);
+          box-shadow: 3px 3px 0 #1a1a1a;
         }
 
         @media (max-width: 1024px) {
@@ -278,23 +300,15 @@ export default function BlogPage() {
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.5rem;
           }
-
-          .blog-title {
-            font-size: 2.5rem;
-          }
         }
 
         @media (max-width: 768px) {
           .blog-container {
-            padding: 1.5rem 1rem;
-          }
-
-          .blog-title {
-            font-size: 2rem;
+            padding: 2rem 1rem;
           }
 
           .blog-subtitle {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
           }
 
           .blogs-grid {

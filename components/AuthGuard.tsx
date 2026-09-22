@@ -41,7 +41,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(180deg, #fff5f8 0%, #f0f4ff 50%, #fff0f5 100%);
+            background: #FFF6E9;
           }
 
           .loading-spinner {

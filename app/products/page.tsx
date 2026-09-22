@@ -90,10 +90,8 @@ export default function ProductsPage() {
     <AuthGuard>
       <div className="products-container">
       <div className="products-header">
-        <h1 className="products-title">
-          Our Products 
-          <span className="title-emoji">🫐</span>
-        </h1>
+        <div className="page-badge">✶ THE FULL LINEUP ✶</div>
+        <h1 className="products-title">THE GOODS.</h1>
         <p className="products-subtitle">
           Pick your vibe. Every color hits different.
         </p>
@@ -127,8 +125,9 @@ export default function ProductsPage() {
         </div>
       ) : (
         <div className="products-grid">
-          {filteredProducts.map((product) => (
+          {filteredProducts.map((product, index) => (
             <div key={product.id} className="product-card">
+              <span className="product-number">{String(index + 1).padStart(2, '0')}</span>
               <div className="product-image">
                 {product.imageUrl ? (
                   <img src={product.imageUrl} alt={product.name} className="product-img" />
@@ -136,8 +135,11 @@ export default function ProductsPage() {
                   <span className="product-emoji">🫐</span>
                 )}
                 <span className="product-category">{product.category}</span>
-                {product.stock !== undefined && product.stock < 5 && (
+                {product.stock !== undefined && product.stock > 0 && product.stock < 5 && (
                   <span className="stock-warning">Only {product.stock} left!</span>
+                )}
+                {product.stock === 0 && (
+                  <span className="stock-warning sold-out">Sold out</span>
                 )}
               </div>
               <div className="product-content">
@@ -162,8 +164,8 @@ export default function ProductsPage() {
       <style jsx>{`
         .products-container {
           min-height: 100vh;
-          background: linear-gradient(180deg, #fff5f8 0%, #f0f4ff 50%, #fff0f5 100%);
-          padding: 2rem;
+          background: #FFF6E9;
+          padding: 3rem 2rem;
         }
 
         .products-header {
@@ -172,59 +174,71 @@ export default function ProductsPage() {
           margin: 0 auto 3rem;
         }
 
-        .products-title {
-          font-size: 3rem;
-          font-weight: 900;
-          margin-bottom: 1rem;
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+        .page-badge {
+          display: inline-block;
+          background: #FFD84D;
+          border: 2px solid #1a1a1a;
+          box-shadow: 3px 3px 0 #1a1a1a;
+          padding: 0.4rem 1rem;
+          font-weight: 700;
+          font-size: 0.8rem;
+          letter-spacing: 0.1em;
+          border-radius: 50px;
+          margin-bottom: 1.25rem;
+          transform: rotate(-2deg);
         }
 
-        .title-emoji {
-          font-size: 3rem;
+        .products-title {
+          font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+          font-size: clamp(2.5rem, 7vw, 4.5rem);
+          color: #1a1a1a;
+          text-transform: uppercase;
+          letter-spacing: -0.02em;
+          margin-bottom: 0.75rem;
         }
 
         .products-subtitle {
-          font-size: 1.3rem;
-          color: #666;
+          font-size: 1.15rem;
+          color: #555;
+          font-weight: 500;
         }
 
         .category-filter {
           display: flex;
           justify-content: center;
-          gap: 1rem;
+          gap: 0.75rem;
           margin-bottom: 3rem;
           flex-wrap: wrap;
         }
 
         .category-button {
-          padding: 0.75rem 1.5rem;
-          border: 2px solid #c44cff;
+          padding: 0.6rem 1.4rem;
+          border: 2px solid #1a1a1a;
           background: white;
-          color: #c44cff;
+          color: #1a1a1a;
           border-radius: 50px;
-          font-weight: 600;
+          font-weight: 700;
+          font-size: 0.9rem;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.15s ease;
+          box-shadow: 3px 3px 0 #1a1a1a;
+          font-family: inherit;
         }
 
         .category-button:hover {
-          background: #c44cff;
-          color: white;
-          transform: translateY(-2px);
+          background: #FFD84D;
+          transform: translate(-1px, -1px);
+          box-shadow: 4px 4px 0 #1a1a1a;
         }
 
         .category-button.active {
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
+          background: #FF4D8D;
           color: white;
-          border-color: transparent;
         }
 
         .products-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 2rem;
           max-width: 1400px;
           margin: 0 auto;
@@ -232,26 +246,44 @@ export default function ProductsPage() {
 
         .product-card {
           background: white;
-          border-radius: 20px;
+          border: 3px solid #1a1a1a;
+          border-radius: 16px;
           overflow: hidden;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-          transition: all 0.3s ease;
+          box-shadow: 6px 6px 0 #1a1a1a;
+          transition: all 0.15s ease;
+          position: relative;
         }
 
         .product-card:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+          transform: translate(-3px, -3px);
+          box-shadow: 9px 9px 0 #1a1a1a;
+        }
+
+        .product-number {
+          position: absolute;
+          top: 0.85rem;
+          left: 1rem;
+          font-family: 'Archivo Black', sans-serif;
+          font-size: 0.95rem;
+          color: #FF4D8D;
+          letter-spacing: 0.05em;
+          z-index: 2;
+          background: white;
+          padding: 0.15rem 0.5rem;
+          border: 2px solid #1a1a1a;
+          border-radius: 8px;
         }
 
         .product-image {
-          background: linear-gradient(135deg, #fff5f8, #f0f4ff);
+          background: #FFF6E9;
+          border-bottom: 3px solid #1a1a1a;
           padding: 3rem 2rem;
           text-align: center;
           position: relative;
         }
 
         .product-emoji {
-          font-size: 6rem;
+          font-size: 5.5rem;
           display: block;
         }
 
@@ -266,32 +298,41 @@ export default function ProductsPage() {
           position: absolute;
           bottom: 1rem;
           left: 1rem;
-          background: #fff3cd;
-          color: #856404;
-          padding: 0.35rem 0.75rem;
+          background: #FFD84D;
+          color: #1a1a1a;
+          border: 2px solid #1a1a1a;
+          padding: 0.3rem 0.75rem;
           border-radius: 20px;
           font-size: 0.75rem;
-          font-weight: 600;
+          font-weight: 700;
+        }
+
+        .stock-warning.sold-out {
+          background: #1a1a1a;
+          color: #FFF6E9;
         }
 
         .error-banner {
           max-width: 600px;
           margin: 0 auto 2rem;
-          background: #fee;
-          color: #c33;
+          background: #FFD0D0;
+          border: 2px solid #1a1a1a;
+          color: #1a1a1a;
           padding: 1rem;
           border-radius: 12px;
           text-align: center;
+          font-weight: 600;
         }
 
         .empty-state {
           text-align: center;
           padding: 4rem 2rem;
           background: white;
+          border: 3px solid #1a1a1a;
           border-radius: 20px;
           max-width: 500px;
           margin: 0 auto;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+          box-shadow: 6px 6px 0 #1a1a1a;
         }
 
         .empty-emoji {
@@ -301,25 +342,30 @@ export default function ProductsPage() {
         }
 
         .empty-state h3 {
+          font-family: 'Archivo Black', sans-serif;
           font-size: 1.5rem;
-          color: #333;
+          color: #1a1a1a;
           margin-bottom: 0.5rem;
+          text-transform: uppercase;
         }
 
         .empty-state p {
           color: #666;
+          font-weight: 500;
         }
 
         .product-category {
           position: absolute;
-          top: 1rem;
+          top: 0.85rem;
           right: 1rem;
-          background: linear-gradient(135deg, #ff6b9d, #c44cff);
-          color: white;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          font-size: 0.8rem;
-          font-weight: 600;
+          background: #1a1a1a;
+          color: #FFF6E9;
+          padding: 0.35rem 0.9rem;
+          border-radius: 50px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
         }
 
         .product-content {
@@ -327,17 +373,19 @@ export default function ProductsPage() {
         }
 
         .product-name {
-          font-size: 1.4rem;
-          font-weight: 700;
-          margin-bottom: 0.75rem;
-          color: #333;
+          font-family: 'Archivo Black', sans-serif;
+          font-size: 1.25rem;
+          margin-bottom: 0.5rem;
+          color: #1a1a1a;
+          text-transform: uppercase;
         }
 
         .product-description {
-          color: #666;
+          color: #555;
           line-height: 1.6;
           margin-bottom: 1.5rem;
           min-height: 80px;
+          font-size: 0.95rem;
         }
 
         .product-footer {
@@ -347,34 +395,35 @@ export default function ProductsPage() {
         }
 
         .product-price {
-          font-size: 1.6rem;
-          font-weight: 800;
-          background: linear-gradient(135deg, #ff6b9d, #c44cff);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          font-family: 'Archivo Black', sans-serif;
+          font-size: 1.5rem;
+          color: #1a1a1a;
         }
 
         .add-to-cart-button {
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          border: none;
-          color: white;
-          padding: 0.75rem 1.5rem;
-          border-radius: 25px;
-          font-weight: 600;
+          background: #1a1a1a;
+          border: 2px solid #1a1a1a;
+          color: #FFF6E9;
+          padding: 0.65rem 1.4rem;
+          border-radius: 50px;
+          font-weight: 700;
+          font-size: 0.9rem;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.15s ease;
+          font-family: inherit;
         }
 
         .add-to-cart-button:hover {
-          transform: scale(1.05);
-          box-shadow: 0 4px 15px rgba(196, 76, 255, 0.3);
+          background: #FF4D8D;
+          transform: translate(-1px, -1px);
+          box-shadow: 3px 3px 0 #1a1a1a;
         }
 
         .add-to-cart-button:disabled {
-          opacity: 0.5;
+          opacity: 0.4;
           cursor: not-allowed;
           transform: none;
+          box-shadow: none;
         }
 
         @media (max-width: 1024px) {
@@ -382,23 +431,15 @@ export default function ProductsPage() {
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 1.5rem;
           }
-
-          .products-title {
-            font-size: 2.5rem;
-          }
         }
 
         @media (max-width: 768px) {
           .products-container {
-            padding: 1.5rem 1rem;
-          }
-
-          .products-title {
-            font-size: 2rem;
+            padding: 2rem 1rem;
           }
 
           .products-subtitle {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
           }
 
           .products-grid {
@@ -412,7 +453,7 @@ export default function ProductsPage() {
 
           .category-button {
             padding: 0.5rem 1rem;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
           }
 
           .product-emoji {
@@ -421,6 +462,10 @@ export default function ProductsPage() {
 
           .product-img {
             height: 8rem;
+          }
+
+          .product-description {
+            min-height: auto;
           }
         }
       `}</style>

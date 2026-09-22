@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../lib/AuthContext';
-import { getAdminOrders, updateAdminOrderStatus, Order } from '../../../lib/api';
+import { getAdminOrders, Order, updateAdminOrderStatus } from '../../../lib/api';
 
 const ORDER_STATUSES = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
 
@@ -131,13 +131,11 @@ export default function AdminOrdersPage() {
         }
 
         .page-title {
-          font-size: 2rem;
-          font-weight: 800;
+          font-size: 1.75rem;
+          font-weight: 700;
           margin-bottom: 2rem;
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #111827;
+          letter-spacing: -0.02em;
         }
 
         .error-banner {
@@ -178,7 +176,7 @@ export default function AdminOrdersPage() {
 
         .order-id {
           font-weight: 700;
-          color: #c44cff;
+          color: #111827;
           font-family: monospace;
         }
 

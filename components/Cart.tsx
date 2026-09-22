@@ -69,7 +69,13 @@ export default function Cart() {
           ) : (
             cart.map((item) => (
               <div key={item.id} className="cart-item">
-                <div className="item-emoji">{item.emoji}</div>
+                <div className="item-emoji">
+                  {item.imageUrl ? (
+                    <img src={item.imageUrl} alt={item.name} className="item-img" />
+                  ) : (
+                    item.emoji || '🫐'
+                  )}
+                </div>
                 <div className="item-details">
                   <h3 className="item-name">{item.name}</h3>
                   <p className="item-price">${item.price.toFixed(2)}</p>
@@ -124,21 +130,21 @@ export default function Cart() {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0, 0, 0, 0.5);
+          background: rgba(26, 26, 26, 0.6);
           z-index: 2000;
           display: flex;
           justify-content: flex-end;
         }
 
         .cart-sidebar {
-          background: white;
+          background: #FFF6E9;
           width: 100%;
           max-width: 450px;
           height: 100%;
           display: flex;
           flex-direction: column;
-          box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
-          animation: slideIn 0.3s ease;
+          border-left: 3px solid #1a1a1a;
+          animation: slideIn 0.25s ease;
         }
 
         @keyframes slideIn {
@@ -151,34 +157,37 @@ export default function Cart() {
         }
 
         .cart-header {
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          padding: 1.5rem;
+          background: #1a1a1a;
+          padding: 1.25rem 1.5rem;
           display: flex;
           justify-content: space-between;
           align-items: center;
+          border-bottom: 3px solid #1a1a1a;
         }
 
         .cart-title {
           margin: 0;
-          color: white;
-          font-size: 1.5rem;
-          font-weight: 800;
+          color: #FFF6E9;
+          font-size: 1.4rem;
+          font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+          text-transform: uppercase;
+          letter-spacing: -0.01em;
         }
 
         .close-button {
-          background: rgba(255, 255, 255, 0.2);
-          border: none;
+          background: #FF4D8D;
+          border: 2px solid #FFF6E9;
           color: white;
-          font-size: 1.5rem;
-          width: 40px;
-          height: 40px;
+          font-size: 1.1rem;
+          font-weight: 700;
+          width: 36px;
+          height: 36px;
           border-radius: 50%;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.15s ease;
         }
 
         .close-button:hover {
-          background: rgba(255, 255, 255, 0.3);
           transform: rotate(90deg);
         }
 
@@ -195,13 +204,15 @@ export default function Cart() {
 
         .empty-text {
           font-size: 1.2rem;
-          color: #666;
+          color: #1a1a1a;
           margin-bottom: 0.5rem;
+          font-weight: 700;
         }
 
         .empty-subtext {
-          color: #999;
+          color: #666;
           font-size: 0.9rem;
+          font-weight: 500;
         }
 
         .cart-item {
@@ -209,19 +220,22 @@ export default function Cart() {
           align-items: center;
           gap: 1rem;
           padding: 1rem;
-          background: #f8f9fa;
+          background: white;
+          border: 2px solid #1a1a1a;
           border-radius: 12px;
           margin-bottom: 1rem;
-          transition: all 0.3s ease;
-        }
-
-        .cart-item:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          box-shadow: 3px 3px 0 #1a1a1a;
         }
 
         .item-emoji {
-          font-size: 2.5rem;
+          font-size: 2rem;
+        }
+
+        .item-img {
+          width: 44px;
+          height: 44px;
+          object-fit: contain;
+          border-radius: 8px;
         }
 
         .item-details {
@@ -230,15 +244,16 @@ export default function Cart() {
 
         .item-name {
           margin: 0 0 0.25rem 0;
-          font-size: 1rem;
-          font-weight: 600;
-          color: #333;
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: #1a1a1a;
         }
 
         .item-price {
           margin: 0;
           color: #666;
           font-size: 0.9rem;
+          font-weight: 600;
         }
 
         .item-quantity {
@@ -248,46 +263,49 @@ export default function Cart() {
         }
 
         .quantity-button {
-          background: linear-gradient(135deg, #ff6b9d, #c44cff);
-          border: none;
-          color: white;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          font-size: 1.2rem;
-          font-weight: bold;
+          background: #1a1a1a;
+          border: 2px solid #1a1a1a;
+          color: #FFF6E9;
+          width: 30px;
+          height: 30px;
+          border-radius: 8px;
+          font-size: 1.1rem;
+          font-weight: 700;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.15s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .quantity-button:hover {
-          transform: scale(1.1);
+          background: #FF4D8D;
         }
 
         .quantity {
-          font-weight: bold;
-          font-size: 1.1rem;
-          min-width: 30px;
+          font-weight: 700;
+          font-size: 1rem;
+          min-width: 24px;
           text-align: center;
         }
 
         .remove-button {
           background: none;
           border: none;
-          font-size: 1.2rem;
+          font-size: 1.1rem;
           cursor: pointer;
-          transition: all 0.3s ease;
-          padding: 0.5rem;
+          transition: all 0.15s ease;
+          padding: 0.25rem;
         }
 
         .remove-button:hover {
-          transform: scale(1.2);
+          transform: scale(1.15);
         }
 
         .cart-footer {
           padding: 1.5rem;
-          background: #f8f9fa;
-          border-top: 1px solid #e0e0e0;
+          background: white;
+          border-top: 3px solid #1a1a1a;
         }
 
         .cart-total {
@@ -298,37 +316,40 @@ export default function Cart() {
         }
 
         .total-label {
-          font-size: 1.2rem;
-          font-weight: 600;
-          color: #333;
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #1a1a1a;
         }
 
         .total-amount {
+          font-family: 'Archivo Black', sans-serif;
           font-size: 1.5rem;
-          font-weight: 800;
-          background: linear-gradient(135deg, #ff6b9d, #c44cff);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #1a1a1a;
         }
 
         .checkout-button {
           width: 100%;
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          border: none;
+          background: #FF4D8D;
+          border: 2px solid #1a1a1a;
           color: white;
-          padding: 1rem;
-          border-radius: 12px;
-          font-size: 1.1rem;
+          padding: 0.9rem;
+          border-radius: 50px;
+          font-size: 1.05rem;
           font-weight: 700;
           cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(196, 76, 255, 0.3);
+          transition: all 0.15s ease;
+          box-shadow: 4px 4px 0 #1a1a1a;
+          font-family: inherit;
         }
 
-        .checkout-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(196, 76, 255, 0.4);
+        .checkout-button:hover:not(:disabled) {
+          transform: translate(-2px, -2px);
+          box-shadow: 6px 6px 0 #1a1a1a;
+        }
+
+        .checkout-button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
         }
 
         @media (max-width: 768px) {

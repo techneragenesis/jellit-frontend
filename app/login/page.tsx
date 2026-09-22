@@ -177,7 +177,7 @@ export default function LoginPage() {
       <style jsx>{`
         .login-container {
           min-height: 100vh;
-          background: linear-gradient(180deg, #fff5f8 0%, #f0f4ff 50%, #fff0f5 100%);
+          background: #FFF6E9;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -188,7 +188,8 @@ export default function LoginPage() {
           background: white;
           padding: 3rem;
           border-radius: 20px;
-          box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+          border: 3px solid #1a1a1a;
+          box-shadow: 8px 8px 0 #1a1a1a;
           max-width: 450px;
           width: 100%;
           animation: slideUp 0.5s ease;
@@ -211,28 +212,30 @@ export default function LoginPage() {
         }
 
         .login-title {
-          font-size: 2rem;
-          font-weight: 800;
+          font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+          font-size: 1.75rem;
           margin-bottom: 0.5rem;
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #1a1a1a;
+          text-transform: uppercase;
+          letter-spacing: -0.01em;
         }
 
         .login-subtitle {
-          color: #666;
+          color: #555;
           font-size: 1rem;
+          font-weight: 500;
         }
 
         .error-message {
-          background: #fee;
-          color: #c33;
+          background: #FFD0D0;
+          border: 2px solid #1a1a1a;
+          color: #1a1a1a;
           padding: 0.75rem;
-          border-radius: 8px;
+          border-radius: 10px;
           margin-bottom: 1.5rem;
           text-align: center;
           font-size: 0.9rem;
+          font-weight: 600;
         }
 
         .login-form {
@@ -248,23 +251,25 @@ export default function LoginPage() {
         }
 
         .form-group label {
-          font-weight: 600;
-          color: #333;
+          font-weight: 700;
+          color: #1a1a1a;
           font-size: 0.9rem;
         }
 
         .form-group input {
           padding: 0.875rem 1rem;
-          border: 2px solid #e0e0e0;
-          border-radius: 12px;
+          border: 2px solid #1a1a1a;
+          border-radius: 10px;
           font-size: 1rem;
-          transition: all 0.3s ease;
+          font-family: inherit;
+          background: #FFFDF7;
+          transition: all 0.15s ease;
         }
 
         .form-group input:focus {
           outline: none;
-          border-color: #c44cff;
-          box-shadow: 0 0 0 3px rgba(196, 76, 255, 0.1);
+          border-color: #FF4D8D;
+          box-shadow: 3px 3px 0 #1a1a1a;
         }
 
         .password-input-container {
@@ -294,21 +299,27 @@ export default function LoginPage() {
         }
 
         .submit-button {
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          border: none;
+          background: #FF4D8D;
+          border: 2px solid #1a1a1a;
           color: white;
           padding: 1rem;
-          border-radius: 12px;
-          font-size: 1.1rem;
+          border-radius: 50px;
+          font-size: 1.05rem;
           font-weight: 700;
           cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(196, 76, 255, 0.3);
+          transition: all 0.15s ease;
+          box-shadow: 4px 4px 0 #1a1a1a;
+          font-family: inherit;
         }
 
         .submit-button:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(196, 76, 255, 0.4);
+          transform: translate(-2px, -2px);
+          box-shadow: 6px 6px 0 #1a1a1a;
+        }
+
+        .submit-button:active:not(:disabled) {
+          transform: translate(2px, 2px);
+          box-shadow: 2px 2px 0 #1a1a1a;
         }
 
         .submit-button:disabled {
@@ -325,19 +336,22 @@ export default function LoginPage() {
         }
 
         .skip-button {
-          background: transparent;
-          border: 2px solid #c44cff;
-          color: #c44cff;
-          padding: 0.75rem 2rem;
+          background: white;
+          border: 2px solid #1a1a1a;
+          color: #1a1a1a;
+          padding: 0.65rem 1.75rem;
           border-radius: 50px;
-          font-weight: 600;
+          font-weight: 700;
+          font-size: 0.9rem;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.15s ease;
+          box-shadow: 3px 3px 0 #1a1a1a;
         }
 
         .skip-button:hover {
-          background: #c44cff;
-          color: white;
+          background: #FFD84D;
+          transform: translate(-1px, -1px);
+          box-shadow: 4px 4px 0 #1a1a1a;
         }
 
         .toggle-text {
@@ -348,14 +362,15 @@ export default function LoginPage() {
         .toggle-button {
           background: none;
           border: none;
-          color: #c44cff;
-          font-weight: 600;
+          color: #7B4DFF;
+          font-weight: 700;
           cursor: pointer;
           text-decoration: underline;
+          font-family: inherit;
         }
 
         .toggle-button:hover {
-          color: #ff6b9d;
+          color: #FF4D8D;
         }
 
         .back-link {
@@ -367,11 +382,12 @@ export default function LoginPage() {
           color: #666;
           text-decoration: none;
           font-size: 0.9rem;
-          transition: color 0.3s ease;
+          font-weight: 600;
+          transition: color 0.15s ease;
         }
 
         .back-link a:hover {
-          color: #c44cff;
+          color: #FF4D8D;
         }
 
         @media (max-width: 768px) {
