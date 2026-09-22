@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../lib/AuthContext';
 import {
-  getProducts,
-  createProduct,
-  updateAdminProduct,
-  deleteAdminProduct,
-  Product,
+    createProduct,
+    deleteAdminProduct,
+    getProducts,
+    Product,
+    updateAdminProduct,
 } from '../../../lib/api';
 
 interface EditableProduct extends Product {
@@ -178,6 +178,13 @@ export default function AdminProductsPage() {
         </form>
       )}
 
+      {products.length === 0 ? (
+        <div className="empty-state">
+          <span>📦</span>
+          <h3>No products in database</h3>
+          <p>Add products using the button above, or check that the backend is running.</p>
+        </div>
+      ) : (
       <div className="products-table-container">
         <table className="products-table">
           <thead>
@@ -276,6 +283,7 @@ export default function AdminProductsPage() {
           </tbody>
         </table>
       </div>
+      )}
 
       <style jsx>{`
         .inventory-page {
@@ -515,6 +523,27 @@ export default function AdminProductsPage() {
         }
 
         .loading p {
+          color: #666;
+        }
+
+        .empty-state {
+          text-align: center;
+          padding: 4rem 2rem;
+          background: white;
+          border-radius: 16px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .empty-state span {
+          font-size: 4rem;
+        }
+
+        .empty-state h3 {
+          margin: 1rem 0 0.5rem;
+          color: #333;
+        }
+
+        .empty-state p {
           color: #666;
         }
       `}</style>
