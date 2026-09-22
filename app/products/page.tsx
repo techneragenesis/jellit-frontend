@@ -20,14 +20,16 @@ export default function ProductsPage() {
         const response = await getProducts();
         if (response.data && response.data.length > 0) {
           // Transform API products to match local product structure
-          const transformedProducts = response.data.map((apiProduct: ApiProduct) => ({
-            id: parseInt(apiProduct.id),
+          const transformedProducts = response.data.map((apiProduct: ApiProduct, index: number) => ({
+            id: index + 1, // Use index as fallback ID for compatibility
             name: apiProduct.name,
             description: apiProduct.description,
             price: apiProduct.price,
-            image: apiProduct.imageUrl || apiProduct.emoji || '🫐',
-            category: apiProduct.category || 'Original',
-            emoji: apiProduct.emoji || '🫐',
+            image: apiProduct.imageUrl || '🫐',
+            category: 'Original',
+            emoji: '🫐',
+            apiId: apiProduct.id, // Store the actual API ID
+            stock: apiProduct.stock,
           }));
           setProducts(transformedProducts);
         }

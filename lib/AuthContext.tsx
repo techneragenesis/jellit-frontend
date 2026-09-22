@@ -9,7 +9,7 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  register: (email: string, password: string, name: string) => Promise<{ success: boolean; error?: string }>;
+  register: (email: string, password: string, name: string, phone: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   skipAuth: () => void;
   hasSkippedAuth: boolean;
@@ -76,9 +76,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const register = async (email: string, password: string, name: string) => {
+  const register = async (email: string, password: string, name: string, phone: string) => {
     try {
-      const response = await apiRegisterUser({ email, password, name });
+      const response = await apiRegisterUser({ email, password, name, phone });
       
       if (response.error) {
         return { success: false, error: response.error };

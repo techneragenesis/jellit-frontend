@@ -8,6 +8,9 @@ export interface Recipe {
   time: string;
   emoji: string;
   category: string;
+  apiId?: string;
+  imageUrl?: string;
+  author?: string;
 }
 
 export const recipes: Recipe[] = [

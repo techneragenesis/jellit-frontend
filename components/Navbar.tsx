@@ -26,6 +26,11 @@ export default function Navbar() {
           <Link href="/blog" className="nav-link">
             Blog
           </Link>
+          {isAuthenticated && (
+            <Link href="/orders" className="nav-link">
+              Orders
+            </Link>
+          )}
         </div>
 
         <div className="navbar-actions">

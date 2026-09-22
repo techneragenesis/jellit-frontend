@@ -13,6 +13,7 @@ export default function LoginPage() {
     email: '',
     password: '',
     name: '',
+    phone: '',
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +25,7 @@ export default function LoginPage() {
 
     const result = isLogin
       ? await login(formData.email, formData.password)
-      : await register(formData.email, formData.password, formData.name);
+      : await register(formData.email, formData.password, formData.name, formData.phone);
 
     setIsLoading(false);
 
@@ -70,18 +71,34 @@ export default function LoginPage() {
 
         <form className="login-form" onSubmit={handleSubmit}>
           {!isLogin && (
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                placeholder="Your name"
-              />
-            </div>
+            <>
+              <div className="form-group">
+                <label htmlFor="name">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Your name"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="phone">Phone (10 digits)</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  placeholder="1234567890"
+                  pattern="[0-9]{10}"
+                  maxLength={10}
+                />
+              </div>
+            </>
           )}
 
           <div className="form-group">

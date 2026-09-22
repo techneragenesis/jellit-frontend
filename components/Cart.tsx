@@ -1,9 +1,49 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useAuth } from '../lib/AuthContext';
 import { useCart } from '../lib/CartContext';
+import { createOrder } from '../lib/api';
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, cartTotal, isCartOpen, setIsCartOpen } = useCart();
+  const { user, isAuthenticated } = useAuth();
+  const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleCheckout = async () => {
+    if (!isAuthenticated || !user) {
+      alert('Please login to checkout');
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      const orderItems = cart.map(item => ({
+        productId: item.apiId || item.id.toString(),
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      const response = await createOrder({
+        userId: user.id,
+        items: orderItems,
+      });
+
+      if (response.error) {
+        alert('Failed to create order: ' + response.error);
+      } else {
+        alert('Order created successfully!');
+        // Clear cart or redirect to orders page
+        setIsCartOpen(false);
+      }
+    } catch (error) {
+      alert('Failed to create order. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   if (!isCartOpen) return null;
 
@@ -66,8 +106,12 @@ export default function Cart() {
               <span className="total-label">Total:</span>
               <span className="total-amount">${cartTotal.toFixed(2)}</span>
             </div>
-            <button className="checkout-button">
-              Checkout ✨
+            <button 
+              className="checkout-button"
+              onClick={handleCheckout}
+              disabled={isProcessing}
+            >
+              {isProcessing ? 'Processing...' : 'Checkout ✨'}
             </button>
           </div>
         )}

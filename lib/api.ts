@@ -48,6 +48,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  phone: string;
 }
 
 export interface LoginCredentials {
@@ -59,6 +60,7 @@ export interface RegisterCredentials {
   email: string;
   password: string;
   name: string;
+  phone: string;
 }
 
 export async function registerUser(credentials: RegisterCredentials) {
@@ -87,6 +89,8 @@ export interface Product {
   price: number;
   imageUrl?: string;
   stock?: number;
+  createdAt: string;
+  updatedAt: string;
   emoji?: string;
   category?: string;
 }
@@ -108,6 +112,7 @@ export async function createProduct(product: Omit<Product, 'id'>) {
 
 // Order APIs
 export interface OrderItem {
+  id: string;
   productId: string;
   quantity: number;
   price: number;
@@ -120,6 +125,7 @@ export interface Order {
   total: number;
   status: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 export async function createOrder(order: { userId: string; items: OrderItem[] }) {
@@ -145,6 +151,7 @@ export interface Blog {
   author: string;
   imageUrl?: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 export async function getBlogs() {

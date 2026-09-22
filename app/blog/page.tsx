@@ -20,7 +20,7 @@ export default function BlogPage() {
         if (response.data && response.data.length > 0) {
           // Transform API blogs to match local recipe structure
           const transformedRecipes = response.data.map((apiBlog: ApiBlog, index: number) => ({
-            id: parseInt(apiBlog.id) || index + 1,
+            id: index + 1, // Use index as fallback ID for compatibility
             title: apiBlog.title,
             description: apiBlog.content.substring(0, 150) + '...',
             ingredients: ['Jellit powder', 'Your favorite liquid', 'Ice'], // Default ingredients
@@ -29,6 +29,9 @@ export default function BlogPage() {
             time: '3 hours',
             emoji: '🫐',
             category: 'Classic',
+            apiId: apiBlog.id, // Store the actual API ID
+            imageUrl: apiBlog.imageUrl,
+            author: apiBlog.author,
           }));
           setRecipes(transformedRecipes);
         }

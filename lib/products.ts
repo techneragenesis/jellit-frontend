@@ -6,6 +6,8 @@ export interface Product {
   image: string;
   category: string;
   emoji: string;
+  apiId?: string;
+  stock?: number;
 }
 
 export const products: Product[] = [
