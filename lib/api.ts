@@ -112,7 +112,7 @@ export async function createProduct(product: Omit<Product, 'id'>) {
 
 // Order APIs
 export interface OrderItem {
-  id: string;
+  id?: string;
   productId: string;
   quantity: number;
   price: number;
