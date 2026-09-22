@@ -4,41 +4,44 @@ import { useEffect, useState } from 'react';
 import AuthGuard from '../../components/AuthGuard';
 import { Product as ApiProduct, getProducts } from '../../lib/api';
 import { useCart } from '../../lib/CartContext';
-import { products as localProducts } from '../../lib/products';
+
+interface DisplayProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl?: string;
+  stock?: number;
+  category: string;
+}
 
 export default function ProductsPage() {
   const { addToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [products, setProducts] = useState(localProducts);
+  const [products, setProducts] = useState<DisplayProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const categories = ['All', 'Original', 'Bundle', 'Special'];
+  const categories = ['All', ...Array.from(new Set(products.map(p => p.category)))];
   
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const response = await getProducts();
-        if (response.data && response.data.length > 0) {
-          // Transform API products to match local product structure
-          const transformedProducts = response.data.map((apiProduct: ApiProduct, index: number) => ({
-            id: index + 1, // Use index as fallback ID for compatibility
-            name: apiProduct.name,
-            description: apiProduct.description,
-            price: apiProduct.price,
-            image: apiProduct.imageUrl || '🫐',
-            category: 'Original',
-            emoji: '🫐',
-            apiId: apiProduct.id, // Store the actual API ID
-            stock: apiProduct.stock,
-          }));
-          setProducts(transformedProducts);
-        }
-      } catch (error) {
-        console.error('Failed to fetch products from API, using local data:', error);
-        // Keep using local products if API fails
-      } finally {
-        setIsLoading(false);
+      const response = await getProducts();
+      if (response.error) {
+        setError(response.error);
+      } else if (response.data) {
+        const transformedProducts = response.data.map((apiProduct: ApiProduct) => ({
+          id: apiProduct.id,
+          name: apiProduct.name,
+          description: apiProduct.description,
+          price: apiProduct.price,
+          imageUrl: apiProduct.imageUrl,
+          stock: apiProduct.stock,
+          category: apiProduct.category || 'Original',
+        }));
+        setProducts(transformedProducts);
       }
+      setIsLoading(false);
     };
 
     fetchProducts();
@@ -96,41 +99,65 @@ export default function ProductsPage() {
         </p>
       </div>
 
-      <div className="category-filter">
-        {categories.map((category) => (
-          <button
-            key={category}
-            className={`category-button ${selectedCategory === category ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(category)}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
+      {error && (
+        <div className="error-banner">
+          <p>⚠️ {error}</p>
+        </div>
+      )}
 
-      <div className="products-grid">
-        {filteredProducts.map((product) => (
-          <div key={product.id} className="product-card">
-            <div className="product-image">
-              <span className="product-emoji">{product.emoji}</span>
-              <span className="product-category">{product.category}</span>
-            </div>
-            <div className="product-content">
-              <h3 className="product-name">{product.name}</h3>
-              <p className="product-description">{product.description}</p>
-              <div className="product-footer">
-                <span className="product-price">${product.price.toFixed(2)}</span>
-                <button
-                  className="add-to-cart-button"
-                  onClick={() => addToCart(product)}
-                >
-                  Add to Cart +
-                </button>
+      {!error && categories.length > 1 && (
+        <div className="category-filter">
+          {categories.map((category) => (
+            <button
+              key={category}
+              className={`category-button ${selectedCategory === category ? 'active' : ''}`}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {filteredProducts.length === 0 ? (
+        <div className="empty-state">
+          <span className="empty-emoji">🫐</span>
+          <h3>No products available</h3>
+          <p>Check back soon for jelly magic!</p>
+        </div>
+      ) : (
+        <div className="products-grid">
+          {filteredProducts.map((product) => (
+            <div key={product.id} className="product-card">
+              <div className="product-image">
+                {product.imageUrl ? (
+                  <img src={product.imageUrl} alt={product.name} className="product-img" />
+                ) : (
+                  <span className="product-emoji">🫐</span>
+                )}
+                <span className="product-category">{product.category}</span>
+                {product.stock !== undefined && product.stock < 5 && (
+                  <span className="stock-warning">Only {product.stock} left!</span>
+                )}
+              </div>
+              <div className="product-content">
+                <h3 className="product-name">{product.name}</h3>
+                <p className="product-description">{product.description}</p>
+                <div className="product-footer">
+                  <span className="product-price">${product.price.toFixed(2)}</span>
+                  <button
+                    className="add-to-cart-button"
+                    onClick={() => addToCart(product as any)}
+                    disabled={product.stock === 0}
+                  >
+                    {product.stock === 0 ? 'Out of Stock' : 'Add to Cart +'}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <style jsx>{`
         .products-container {
@@ -228,6 +255,61 @@ export default function ProductsPage() {
           display: block;
         }
 
+        .product-img {
+          max-width: 100%;
+          height: 10rem;
+          object-fit: contain;
+          border-radius: 12px;
+        }
+
+        .stock-warning {
+          position: absolute;
+          bottom: 1rem;
+          left: 1rem;
+          background: #fff3cd;
+          color: #856404;
+          padding: 0.35rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .error-banner {
+          max-width: 600px;
+          margin: 0 auto 2rem;
+          background: #fee;
+          color: #c33;
+          padding: 1rem;
+          border-radius: 12px;
+          text-align: center;
+        }
+
+        .empty-state {
+          text-align: center;
+          padding: 4rem 2rem;
+          background: white;
+          border-radius: 20px;
+          max-width: 500px;
+          margin: 0 auto;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-emoji {
+          font-size: 5rem;
+          display: block;
+          margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+          font-size: 1.5rem;
+          color: #333;
+          margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+          color: #666;
+        }
+
         .product-category {
           position: absolute;
           top: 1rem;
@@ -289,13 +371,39 @@ export default function ProductsPage() {
           box-shadow: 0 4px 15px rgba(196, 76, 255, 0.3);
         }
 
+        .add-to-cart-button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        @media (max-width: 1024px) {
+          .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+          }
+
+          .products-title {
+            font-size: 2.5rem;
+          }
+        }
+
         @media (max-width: 768px) {
+          .products-container {
+            padding: 1.5rem 1rem;
+          }
+
           .products-title {
             font-size: 2rem;
           }
 
+          .products-subtitle {
+            font-size: 1.1rem;
+          }
+
           .products-grid {
             grid-template-columns: 1fr;
+            gap: 1.25rem;
           }
 
           .category-filter {
@@ -305,6 +413,14 @@ export default function ProductsPage() {
           .category-button {
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
+          }
+
+          .product-emoji {
+            font-size: 4rem;
+          }
+
+          .product-img {
+            height: 8rem;
           }
         }
       `}</style>

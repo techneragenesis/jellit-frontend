@@ -132,6 +132,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           overflow-y: auto;
         }
 
+        @media (max-width: 1024px) {
+          .admin-sidebar {
+            width: 200px;
+          }
+
+          .sidebar-link {
+            padding: 0.65rem 0.85rem;
+          }
+        }
+
         @media (max-width: 768px) {
           .admin-layout {
             flex-direction: column;
@@ -141,38 +151,52 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             width: 100%;
             height: auto;
             position: static;
-            flex-direction: row;
-            overflow-x: auto;
-            padding: 1rem;
-            align-items: center;
+            flex-direction: column;
+            padding: 0.75rem;
           }
 
           .sidebar-header {
-            padding-bottom: 0;
-            border-bottom: none;
-            margin-bottom: 0;
+            padding-bottom: 0.75rem;
+            margin-bottom: 0.75rem;
           }
 
           .sidebar-title {
-            display: none;
+            font-size: 1rem;
+          }
+
+          .sidebar-logo {
+            font-size: 1.4rem;
           }
 
           .sidebar-nav {
             flex-direction: row;
-            gap: 0.5rem;
+            gap: 0.4rem;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+            -webkit-overflow-scrolling: touch;
           }
 
           .sidebar-link {
             white-space: nowrap;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.85rem;
+            flex-shrink: 0;
           }
 
-          .sidebar-label {
-            display: none;
+          .sidebar-icon {
+            font-size: 1.1rem;
           }
 
           .sidebar-back {
             border-top: none;
             white-space: nowrap;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.85rem;
+            align-self: flex-start;
+          }
+
+          .admin-main {
+            padding: 1rem;
           }
         }
       `}</style>

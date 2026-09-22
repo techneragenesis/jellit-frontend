@@ -1,13 +1,44 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import AuthGuard from '../components/AuthGuard';
 import { useCart } from '../lib/CartContext';
-import { products } from '../lib/products';
+import { Product as ApiProduct, getProducts } from '../lib/api';
+
+interface DisplayProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl?: string;
+  stock?: number;
+  category: string;
+}
 
 export default function Home() {
   const { addToCart } = useCart();
-  const featuredProducts = products.slice(0, 3);
+  const [featuredProducts, setFeaturedProducts] = useState<DisplayProduct[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await getProducts();
+      if (response.data) {
+        setFeaturedProducts(
+          response.data.slice(0, 3).map((apiProduct: ApiProduct) => ({
+            id: apiProduct.id,
+            name: apiProduct.name,
+            description: apiProduct.description,
+            price: apiProduct.price,
+            imageUrl: apiProduct.imageUrl,
+            stock: apiProduct.stock,
+            category: apiProduct.category || 'Original',
+          }))
+        );
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <AuthGuard>
@@ -68,24 +99,34 @@ export default function Home() {
       {/* Featured Products */}
       <section className="featured-products">
         <h2 className="section-title">Fan Favorites 💖</h2>
-        <div className="products-grid">
-          {featuredProducts.map((product) => (
-            <div key={product.id} className="product-card">
-              <div className="product-emoji">{product.emoji}</div>
-              <h3 className="product-name">{product.name}</h3>
-              <p className="product-description">{product.description}</p>
-              <div className="product-footer">
-                <span className="product-price">${product.price.toFixed(2)}</span>
-                <button
-                  className="add-to-cart-button"
-                  onClick={() => addToCart(product)}
-                >
-                  Add to Cart +
-                </button>
+        {featuredProducts.length === 0 ? (
+          <div className="empty-products">
+            <p>Products coming soon!</p>
+          </div>
+        ) : (
+          <div className="products-grid">
+            {featuredProducts.map((product) => (
+              <div key={product.id} className="product-card">
+                {product.imageUrl ? (
+                  <img src={product.imageUrl} alt={product.name} className="product-img" />
+                ) : (
+                  <div className="product-emoji">🫐</div>
+                )}
+                <h3 className="product-name">{product.name}</h3>
+                <p className="product-description">{product.description}</p>
+                <div className="product-footer">
+                  <span className="product-price">${product.price.toFixed(2)}</span>
+                  <button
+                    className="add-to-cart-button"
+                    onClick={() => addToCart(product as any)}
+                  >
+                    Add to Cart +
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
         <div className="view-all-container">
           <Link href="/products" className="view-all-button">
             View All Products →
@@ -323,6 +364,20 @@ export default function Home() {
           font-size: 5rem;
           text-align: center;
           margin-bottom: 1rem;
+        }
+
+        .product-img {
+          width: 100%;
+          height: 12rem;
+          object-fit: contain;
+          border-radius: 12px;
+          margin-bottom: 1rem;
+        }
+
+        .empty-products {
+          text-align: center;
+          padding: 2rem;
+          color: #666;
         }
 
         .product-name {

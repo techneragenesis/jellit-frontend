@@ -219,11 +219,19 @@ export default function Navbar() {
 
         @media (max-width: 768px) {
           .navbar {
-            padding: 1rem;
+            padding: 0.75rem 1rem;
+          }
+
+          .navbar-container {
+            flex-wrap: wrap;
+            gap: 0.5rem;
           }
 
           .navbar-links {
-            gap: 1rem;
+            gap: 0.5rem;
+            order: 3;
+            width: 100%;
+            justify-content: center;
           }
 
           .nav-link {
@@ -255,6 +263,22 @@ export default function Navbar() {
           .login-button {
             padding: 0.4rem 1rem;
             font-size: 0.8rem;
+          }
+
+          .cart-button {
+            padding: 0.5rem 1rem;
+            font-size: 1.2rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .nav-link {
+            font-size: 0.8rem;
+            padding: 0.35rem 0.6rem;
+          }
+
+          .navbar-links {
+            gap: 0.25rem;
           }
         }
       `}</style>

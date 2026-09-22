@@ -3,52 +3,26 @@
 import { useEffect, useState } from 'react';
 import AuthGuard from '../../components/AuthGuard';
 import { Blog as ApiBlog, getBlogs } from '../../lib/api';
-import { recipes as localRecipes } from '../../lib/recipes';
 
 export default function BlogPage() {
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [expandedRecipe, setExpandedRecipe] = useState<number | null>(null);
-  const [recipes, setRecipes] = useState(localRecipes);
+  const [expandedBlog, setExpandedBlog] = useState<string | null>(null);
+  const [blogs, setBlogs] = useState<ApiBlog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const categories = ['All', 'Classic', 'Dessert', 'Fusion', 'Cocktail', 'Party'];
-  
   useEffect(() => {
     const fetchBlogs = async () => {
-      try {
-        const response = await getBlogs();
-        if (response.data && response.data.length > 0) {
-          // Transform API blogs to match local recipe structure
-          const transformedRecipes = response.data.map((apiBlog: ApiBlog, index: number) => ({
-            id: index + 1, // Use index as fallback ID for compatibility
-            title: apiBlog.title,
-            description: apiBlog.content.substring(0, 150) + '...',
-            ingredients: ['Jellit powder', 'Your favorite liquid', 'Ice'], // Default ingredients
-            instructions: apiBlog.content.split('\n').filter(step => step.length > 0),
-            difficulty: 'Easy',
-            time: '3 hours',
-            emoji: '🫐',
-            category: 'Classic',
-            apiId: apiBlog.id, // Store the actual API ID
-            imageUrl: apiBlog.imageUrl,
-            author: apiBlog.author,
-          }));
-          setRecipes(transformedRecipes);
-        }
-      } catch (error) {
-        console.error('Failed to fetch blogs from API, using local data:', error);
-        // Keep using local recipes if API fails
-      } finally {
-        setIsLoading(false);
+      const response = await getBlogs();
+      if (response.error) {
+        setError(response.error);
+      } else if (response.data) {
+        setBlogs(response.data);
       }
+      setIsLoading(false);
     };
 
     fetchBlogs();
   }, []);
-  
-  const filteredRecipes = selectedCategory === 'All' 
-    ? recipes 
-    : recipes.filter(r => r.category === selectedCategory);
 
   if (isLoading) {
     return (
@@ -56,7 +30,7 @@ export default function BlogPage() {
         <div className="blog-container">
           <div className="loading-container">
             <span className="loading-emoji">📖</span>
-            <p>Loading recipes...</p>
+            <p>Loading posts...</p>
             <style jsx>{`
               .loading-container {
                 display: flex;
@@ -90,77 +64,63 @@ export default function BlogPage() {
       <div className="blog-container">
       <div className="blog-header">
         <h1 className="blog-title">
-          Recipe Hub 
+          Blog 
           <span className="title-emoji">📖</span>
         </h1>
         <p className="blog-subtitle">
-          Level up your jelly game with these fire recipes. Your taste buds will thank you.
+          Level up your jelly game with our latest posts and recipes.
         </p>
       </div>
 
-      <div className="category-filter">
-        {categories.map((category) => (
-          <button
-            key={category}
-            className={`category-button ${selectedCategory === category ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(category)}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
+      {error && (
+        <div className="error-banner">
+          <p>⚠️ {error}</p>
+        </div>
+      )}
 
-      <div className="recipes-grid">
-        {filteredRecipes.map((recipe) => (
-          <div key={recipe.id} className="recipe-card">
-            <div className="recipe-header">
-              <span className="recipe-emoji">{recipe.emoji}</span>
-              <span className="recipe-category">{recipe.category}</span>
-            </div>
-            <h3 className="recipe-title">{recipe.title}</h3>
-            <p className="recipe-description">{recipe.description}</p>
-            
-            <div className="recipe-meta">
-              <span className="meta-item">
-                <span className="meta-icon">⏱️</span>
-                {recipe.time}
-              </span>
-              <span className="meta-item">
-                <span className="meta-icon">📊</span>
-                {recipe.difficulty}
-              </span>
-            </div>
-
-            <button
-              className="expand-button"
-              onClick={() => setExpandedRecipe(expandedRecipe === recipe.id ? null : recipe.id)}
-            >
-              {expandedRecipe === recipe.id ? 'Show Less ▲' : 'View Recipe ▼'}
-            </button>
-
-            {expandedRecipe === recipe.id && (
-              <div className="recipe-details">
-                <div className="recipe-section">
-                  <h4>Ingredients:</h4>
-                  <ul>
-                    {recipe.ingredients.map((ingredient, index) => (
-                      <li key={index}>{ingredient}</li>
-                    ))}
-                  </ul>
+      {blogs.length === 0 ? (
+        <div className="empty-state">
+          <span className="empty-emoji">📝</span>
+          <h3>No posts yet</h3>
+          <p>Check back soon for jelly content!</p>
+        </div>
+      ) : (
+        <div className="blogs-grid">
+          {blogs.map((blog) => (
+            <div key={blog.id} className="blog-card">
+              {blog.imageUrl && (
+                <div className="blog-image">
+                  <img src={blog.imageUrl} alt={blog.title} />
                 </div>
-                <div className="recipe-section">
-                  <h4>Instructions:</h4>
-                  <ol>
-                    {recipe.instructions.map((instruction, index) => (
-                      <li key={index}>{instruction}</li>
-                    ))}
-                  </ol>
+              )}
+              <div className="blog-card-content">
+                <div className="blog-meta">
+                  <span className="blog-author">✍️ {blog.author}</span>
+                  <span className="blog-date">
+                    {new Date(blog.createdAt).toLocaleDateString()}
+                  </span>
                 </div>
+                <h3 className="blog-card-title">{blog.title}</h3>
+                <p className="blog-excerpt">
+                  {expandedBlog === blog.id
+                    ? blog.content
+                    : blog.content.length > 180
+                      ? blog.content.substring(0, 180) + '...'
+                      : blog.content}
+                </p>
+                {blog.content.length > 180 && (
+                  <button
+                    className="expand-button"
+                    onClick={() => setExpandedBlog(expandedBlog === blog.id ? null : blog.id)}
+                  >
+                    {expandedBlog === blog.id ? 'Show Less ▲' : 'Read More ▼'}
+                  </button>
+                )}
               </div>
-            )}
-          </div>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       <style jsx>{`
         .blog-container {
@@ -194,107 +154,106 @@ export default function BlogPage() {
           color: #666;
         }
 
-        .category-filter {
-          display: flex;
-          justify-content: center;
-          gap: 1rem;
-          margin-bottom: 3rem;
-          flex-wrap: wrap;
+        .error-banner {
+          max-width: 600px;
+          margin: 0 auto 2rem;
+          background: #fee;
+          color: #c33;
+          padding: 1rem;
+          border-radius: 12px;
+          text-align: center;
         }
 
-        .category-button {
-          padding: 0.75rem 1.5rem;
-          border: 2px solid #c44cff;
+        .empty-state {
+          text-align: center;
+          padding: 4rem 2rem;
           background: white;
-          color: #c44cff;
-          border-radius: 50px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
+          border-radius: 20px;
+          max-width: 500px;
+          margin: 0 auto;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
-        .category-button:hover {
-          background: #c44cff;
-          color: white;
-          transform: translateY(-2px);
+        .empty-emoji {
+          font-size: 5rem;
+          display: block;
+          margin-bottom: 1rem;
         }
 
-        .category-button.active {
-          background: linear-gradient(135deg, #ff6b9d 0%, #c44cff 50%, #6b5bff 100%);
-          color: white;
-          border-color: transparent;
+        .empty-state h3 {
+          font-size: 1.5rem;
+          color: #333;
+          margin-bottom: 0.5rem;
         }
 
-        .recipes-grid {
+        .empty-state p {
+          color: #666;
+        }
+
+        .blogs-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
           gap: 2rem;
           max-width: 1400px;
           margin: 0 auto;
         }
 
-        .recipe-card {
+        .blog-card {
           background: white;
           border-radius: 20px;
-          padding: 2rem;
+          overflow: hidden;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
           transition: all 0.3s ease;
+          display: flex;
+          flex-direction: column;
         }
 
-        .recipe-card:hover {
+        .blog-card:hover {
           transform: translateY(-5px);
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
         }
 
-        .recipe-header {
+        .blog-image img {
+          width: 100%;
+          height: 200px;
+          object-fit: cover;
+          display: block;
+        }
+
+        .blog-card-content {
+          padding: 1.5rem;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
+
+        .blog-meta {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 1rem;
+          margin-bottom: 0.75rem;
+          font-size: 0.85rem;
+          color: #999;
         }
 
-        .recipe-emoji {
-          font-size: 3rem;
-        }
-
-        .recipe-category {
-          background: linear-gradient(135deg, #ff6b9d, #c44cff);
-          color: white;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          font-size: 0.8rem;
+        .blog-author {
           font-weight: 600;
+          color: #c44cff;
         }
 
-        .recipe-title {
-          font-size: 1.5rem;
+        .blog-card-title {
+          font-size: 1.4rem;
           font-weight: 700;
           margin-bottom: 0.75rem;
           color: #333;
         }
 
-        .recipe-description {
+        .blog-excerpt {
           color: #666;
-          line-height: 1.6;
+          line-height: 1.7;
           margin-bottom: 1rem;
-        }
-
-        .recipe-meta {
-          display: flex;
-          gap: 1.5rem;
-          margin-bottom: 1.5rem;
-        }
-
-        .meta-item {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          color: #666;
-          font-size: 0.9rem;
-        }
-
-        .meta-icon {
-          font-size: 1.2rem;
+          flex: 1;
+          white-space: pre-line;
         }
 
         .expand-button {
@@ -314,63 +273,33 @@ export default function BlogPage() {
           box-shadow: 0 4px 15px rgba(196, 76, 255, 0.3);
         }
 
-        .recipe-details {
-          margin-top: 1.5rem;
-          padding-top: 1.5rem;
-          border-top: 2px solid #f0f0f0;
-          animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
+        @media (max-width: 1024px) {
+          .blogs-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+
+          .blog-title {
+            font-size: 2.5rem;
           }
-        }
-
-        .recipe-section {
-          margin-bottom: 1.5rem;
-        }
-
-        .recipe-section h4 {
-          font-size: 1.1rem;
-          font-weight: 700;
-          margin-bottom: 0.75rem;
-          color: #333;
-        }
-
-        .recipe-section ul,
-        .recipe-section ol {
-          margin: 0;
-          padding-left: 1.5rem;
-          color: #666;
-          line-height: 1.8;
-        }
-
-        .recipe-section li {
-          margin-bottom: 0.5rem;
         }
 
         @media (max-width: 768px) {
+          .blog-container {
+            padding: 1.5rem 1rem;
+          }
+
           .blog-title {
             font-size: 2rem;
           }
 
-          .recipes-grid {
+          .blog-subtitle {
+            font-size: 1.1rem;
+          }
+
+          .blogs-grid {
             grid-template-columns: 1fr;
-          }
-
-          .category-filter {
-            gap: 0.5rem;
-          }
-
-          .category-button {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
+            gap: 1.25rem;
           }
         }
       `}</style>
