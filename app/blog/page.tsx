@@ -1,11 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import AuthGuard from '../../components/AuthGuard';
 import { Blog as ApiBlog, getBlogs } from '../../lib/api';
 
 export default function BlogPage() {
-  const [expandedBlog, setExpandedBlog] = useState<string | null>(null);
   const [blogs, setBlogs] = useState<ApiBlog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -85,7 +85,7 @@ export default function BlogPage() {
       ) : (
         <div className="blogs-grid">
           {blogs.map((blog) => (
-            <div key={blog.id} className="blog-card">
+            <Link key={blog.id} href={`/blog/${blog.id}`} className="blog-card">
               {blog.imageUrl && (
                 <div className="blog-image">
                   <img src={blog.imageUrl} alt={blog.title} />
@@ -100,22 +100,11 @@ export default function BlogPage() {
                 </div>
                 <h3 className="blog-card-title">{blog.title}</h3>
                 <p className="blog-excerpt">
-                  {expandedBlog === blog.id
-                    ? blog.content
-                    : blog.content.length > 180
-                      ? blog.content.substring(0, 180) + '...'
-                      : blog.content}
+                  {blog.content.length > 180 ? blog.content.substring(0, 180) + '...' : blog.content}
                 </p>
-                {blog.content.length > 180 && (
-                  <button
-                    className="expand-button"
-                    onClick={() => setExpandedBlog(expandedBlog === blog.id ? null : blog.id)}
-                  >
-                    {expandedBlog === blog.id ? 'Show Less ▲' : 'Read More ▼'}
-                  </button>
-                )}
+                <span className="expand-button">Read Article →</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}
@@ -212,7 +201,7 @@ export default function BlogPage() {
           margin: 0 auto;
         }
 
-        .blog-card {
+        :global(.blog-card) {
           background: white;
           border: 3px solid #1a1a1a;
           border-radius: 16px;
@@ -221,9 +210,11 @@ export default function BlogPage() {
           transition: all 0.15s ease;
           display: flex;
           flex-direction: column;
+          color: inherit;
+          text-decoration: none;
         }
 
-        .blog-card:hover {
+        :global(.blog-card:hover) {
           transform: translate(-3px, -3px);
           box-shadow: 9px 9px 0 #1a1a1a;
         }

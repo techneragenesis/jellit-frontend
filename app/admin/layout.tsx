@@ -104,36 +104,40 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           flex: 1;
         }
 
-        .sidebar-link {
+        :global(.sidebar-link) {
           display: flex;
           align-items: center;
           gap: 0.75rem;
           padding: 0.65rem 0.85rem;
           border-radius: 8px;
-          color: #9ca3af;
+          color: #d1d5db !important;
           text-decoration: none;
           font-weight: 600;
           font-size: 0.9rem;
           transition: all 0.15s ease;
         }
 
-        .sidebar-link:hover {
+        :global(.sidebar-link:hover) {
           background: #23262e;
-          color: #fff;
+          color: #fff !important;
         }
 
-        .sidebar-link.active {
+        :global(.sidebar-link.active) {
           background: #2d3340;
-          color: #fff;
+          color: #fff !important;
           box-shadow: inset 3px 0 0 #FF4D8D;
+        }
+
+        .sidebar-label {
+          color: inherit;
         }
 
         .sidebar-icon {
           font-size: 1.1rem;
         }
 
-        .sidebar-back {
-          color: #9ca3af;
+        :global(.sidebar-back) {
+          color: #d1d5db !important;
           text-decoration: none;
           font-size: 0.85rem;
           font-weight: 600;
@@ -142,8 +146,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           transition: color 0.15s ease;
         }
 
-        .sidebar-back:hover {
-          color: #fff;
+        :global(.sidebar-back:hover) {
+          color: #fff !important;
         }
 
         .admin-main {
@@ -158,7 +162,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             width: 200px;
           }
 
-          .sidebar-link {
+          :global(.sidebar-link) {
             padding: 0.55rem 0.75rem;
             font-size: 0.85rem;
           }
@@ -202,14 +206,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             -webkit-overflow-scrolling: touch;
           }
 
-          .sidebar-link {
+          :global(.sidebar-link) {
             white-space: nowrap;
             padding: 0.45rem 0.8rem;
             font-size: 0.8rem;
             flex-shrink: 0;
           }
 
-          .sidebar-link.active {
+          :global(.sidebar-link.active) {
             box-shadow: none;
             background: #FF4D8D;
           }
@@ -218,7 +222,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             font-size: 1rem;
           }
 
-          .sidebar-back {
+          :global(.sidebar-back) {
             border-top: none;
             white-space: nowrap;
             padding: 0.45rem 0.8rem;
