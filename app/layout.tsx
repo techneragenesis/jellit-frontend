@@ -8,6 +8,7 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "Jellit - Turn Any Liquid Into Jelly Magic",
   description: "The powder that makes your drinks hit different. Jello shots just leveled up.",
+  icons: { icon: "/logo.png" },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
