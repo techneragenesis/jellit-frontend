@@ -33,8 +33,7 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="navbar-container">
           <Link href="/" className="navbar-logo">
-            <span className="logo-emoji">🫐</span>
-            <span className="logo-text">JELLIT</span>
+            <img src="/logo.png" alt="Jellit" className="logo-img" />
           </Link>
 
           <div className="navbar-links">
@@ -141,13 +140,10 @@ export default function Navbar() {
           letter-spacing: -0.02em;
         }
 
-        .logo-emoji {
-          font-size: 1.8rem;
-        }
-
-        .logo-text {
-          color: #FF4D8D;
-          text-shadow: 2px 2px 0 #1a1a1a;
+        .logo-img {
+          display: block;
+          height: 44px;
+          width: auto;
         }
 
         .navbar-links {
@@ -299,8 +295,8 @@ export default function Navbar() {
             font-size: 1.4rem;
           }
 
-          .logo-emoji {
-            font-size: 1.4rem;
+          .logo-img {
+            height: 36px;
           }
 
           .navbar-actions {

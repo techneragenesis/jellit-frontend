@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import AuthGuard from '../components/AuthGuard';
-import { useCart } from '../lib/CartContext';
-import { Product as ApiProduct, getProducts } from '../lib/api';
+import AuthGuard from '../../components/AuthGuard';
+import { useCart } from '../../lib/CartContext';
+import { Product as ApiProduct, getProducts } from '../../lib/api';
 
 interface DisplayProduct {
   id: string;
