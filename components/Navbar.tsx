@@ -37,7 +37,7 @@ export default function Navbar() {
           </Link>
 
           <div className="navbar-links">
-            <Link href="/" className="nav-link">
+            <Link href="/main" className="nav-link">
               Home
             </Link>
             <Link href="/products" className="nav-link">
